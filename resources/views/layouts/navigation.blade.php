@@ -53,9 +53,9 @@
             </a>
         </li>
         <li class="no-b">
-            <a href="{{ route('tempat.index') }}">
+            <a href="{{ route('perangkat-daerah.index') }}">
                 <i class="icon icon-placeholder text-yellow s-18"></i>
-                <span>Tempat</span>
+                <span>Perangkat Daerah</span>
             </a>
         </li>
         <li class="no-b">

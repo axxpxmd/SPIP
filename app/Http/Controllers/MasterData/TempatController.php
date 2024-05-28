@@ -12,7 +12,7 @@ use App\Models\Tempat;
 
 class TempatController extends Controller
 {
-    protected $route = 'tempat.';
+    protected $route = 'perangkat-daerah.';
     protected $view = 'pages.masterData.tempat.';
     protected $title = 'Perangkat Daerah';
 

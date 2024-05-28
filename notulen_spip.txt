@@ -1,0 +1,14 @@
+LINK Notulen https://docs.google.com/spreadsheets/d/1E6pVk_rGSloRqdinYvbd2kqzGd0WdzKPthd14fmW4TE/edit?usp=sharing
+
+
+* tm_users
+* tm_pegawais
+* model_has_permissions
+* model_has_roles
+* role_has_permissions
+* roles
+* templates
+* permissions
+* tm_indikators
+
+

@@ -1,7 +1,3 @@
-@php
-$template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')->first();
-$path = 'images/ava/';
-@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -12,8 +8,8 @@ $path = 'images/ava/';
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Title -->
-    <link rel="icon" href="{{ asset('images/template/'.$template->logo_title) }}" type="image/x-icon">
-    <title>SAKIP @yield('title')</title>
+    <link rel="icon" href="{{ asset('images/template/tangsel.png') }}" type="image/x-icon">
+    <title>SPIP @yield('title')</title>
 
     <!-- CSS -->
     @yield('style')
@@ -33,7 +29,7 @@ $path = 'images/ava/';
     <aside class="main-sidebar fixed offcanvas shadow" data-toggle='offcanvas'>
         <section class="sidebar">
             <div class="d-block img-fluid mt-3 mb-3">
-                <img src="{{ asset('images/template/'.$template->logo)}}" class="mx-auto d-block" width="100" alt="Logo Top">
+                <img src="{{ asset('images/template/tangsel.png')}}" class="mx-auto d-block" width="100" alt="Logo Top">
             </div>
             <div class="relative">
                 <a data-toggle="collapse" href="#userSettingsCollapse" role="button" class="btn-fab btn-fab-sm absolute fab-right-bottom fab-top btn-primary shadow1 ">
@@ -41,7 +37,7 @@ $path = 'images/ava/';
                 </a>
                 <div class="user-panel p-3 light mb-2">
                     <div class="float-left image pl-1">
-                        <img width="60" height="60" class="rounded-circle img-circular mr-2" src="{{ config('app.sftp_src') . $path . Auth::user()->pegawai->foto }}" alt="User Image">
+                        <img width="60" height="60" class="rounded-circle img-circular mr-2" src="{{ config('app.sftp_src') . 'images/ava/' . Auth::user()->pegawai->foto }}" alt="User Image">
                     </div>
                     <div class="float-left info mt-2 pl-2">
                         <h6 class="font-weight-light mb-1">{{ Auth::user()->username }}</h6>

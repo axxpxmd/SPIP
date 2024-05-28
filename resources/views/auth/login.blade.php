@@ -24,7 +24,7 @@
 <body style="font-family: 'Poppins', sans-serif">
     <div class="wrapper">
         <div class="inner">
-            <img src="{{ asset('assetLogin/images/gif.gif') }}" alt="" class="image-1" style="margin-left: -120px !important; margin-bottom: 33px !important">
+            <img src="{{ asset('assetLogin/images/survey.png') }}" alt="" class="image-1" width="900px" style="margin-left: -190px !important; margin-bottom: 17px !important">
             <div class="text-center">
                 <div class="row">
                     <div class="col-4 p-0">

@@ -73,8 +73,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('pertanyaan/api', 'QuestionController@api')->name('pertanyaan.api');
 
         // Tempat
-        Route::resource('tempat', 'TempatController');
-        Route::name('tempat.')->group(function () {
+        Route::resource('perangkat-daerah', 'TempatController');
+        Route::name('perangkat-daerah.')->group(function () {
             Route::post('api', 'TempatController@api')->name('api');
         });
 
@@ -140,6 +140,3 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('data/api', 'StatuPengisianController@api')->name('api');
     });
 });
-
-Route::get('test/{jenis}', 'HomeController@test');
-Route::get('check/{jenis}', 'HomeController@checkDuplicate');
