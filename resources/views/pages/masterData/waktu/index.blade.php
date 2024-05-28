@@ -23,9 +23,8 @@
                             <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <th width="5%">No</th>
-                                    <th width="25%">Tahun</th>
-                                    <th width="30%">Mulai</th>
-                                    <th width="30%">Selesai</th>
+                                    <th width="65%">Tahun</th>
+                                    <th width="20%">Status</th>
                                     <th width="10%"></th>
                                 </thead>
                                 <tbody></tbody>
@@ -48,13 +47,14 @@
                                         <label for="tahun" class="col-form-label s-12 col-md-4">Tahun<span class="text-danger ml-1">*</span></label>
                                         <input type="number" name="tahun" id="tahun_id" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                     </div>
-                                    <div class="form-group m-0">
-                                        <label for="start" class="col-form-label s-12 col-md-4">Mulai<span class="text-danger ml-1">*</span></label>
-                                        <input type="datetime-local" name="start" id="start_id" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                    </div>
-                                    <div class="form-group m-0">
-                                        <label for="end" class="col-form-label s-12 col-md-4">Selesai<span class="text-danger ml-1">*</span></label>
-                                        <input type="datetime-local" name="end" id="end_id" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                    <div class="form-group m-0" id="status_display">
+                                        <label for="status" class="col-form-label s-12 col-md-4">Status<span class="text-danger ml-1">*</span></label>
+                                        <div class="col-md-8 p-0">
+                                            <select name="status" id="status_id" class="select2 form-control r-0 light s-12">
+                                                <option value="1">Aktif</option>
+                                                <option value="0">Tidak Aktif</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group mt-2">
                                         <div class="col-md-4"></div>
@@ -84,8 +84,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'tahun', name: 'tahun'},
-            {data: 'start', name: 'start'},
-            {data: 'end', name: 'end'},
+            {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
@@ -102,6 +101,7 @@
         $('#txtAction').html('');
         $('#reset').show();
         $('#tahun_id').focus();
+        $('#status_display').hide();
     }
 
     add();
@@ -142,10 +142,11 @@
         $('#reset').hide();
         $('input[name=_method]').val('PATCH');
         $.get("{{ route($route.'edit', ':id') }}".replace(':id', id), function(data){
+            $('#status_display').show();
             $('#id').val(data.id);
             $('#tahun_id').val(data.tahun).focus();
-            $('#start_id').val(data.start);
-            $('#end_id').val(data.end);
+            $('#status_id').val(data.status);
+            $('#status_id').trigger('change.select2');
         }, "JSON").fail(function(){
             reload();
         });

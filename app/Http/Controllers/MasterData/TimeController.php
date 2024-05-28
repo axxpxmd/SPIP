@@ -44,38 +44,25 @@ class TimeController extends Controller
                     <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus'><i class='icon icon-remove'></i></a>";
                 }
             })
-            ->editColumn('start', function ($p) {
-                return Carbon::parse($p->start)->format('d M Y | H:i:s');
-            })
-            ->editColumn('end', function ($p) {
-                return Carbon::parse($p->end)->format('d M Y | H:i:s');
+            ->editColumn('status', function ($p) {
+                return $p->status == 1 ? 'Aktif' : 'Tidak Aktif';
             })
             ->addIndexColumn()
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'status'])
             ->toJson();
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'tahun' => 'required|unique:tm_times,tahun',
-            'start' => 'required',
-            'end' => 'required'
+            'tahun' => 'required|unique:tm_times,tahun'
         ]);
 
         // get params
         $tahun = $request->tahun;
-        $start = $request->start;
-        $end = $request->end;
-
-        // convert  
-        $timestampsStart = str_replace('T', ' ', $start);
-        $timestampsEnd = str_replace('T', ' ', $end);
 
         $waktu = new Time();
         $waktu->tahun = $tahun;
-        $waktu->start = $timestampsStart;
-        $waktu->end = $timestampsEnd;
         $waktu->save();
 
         return response()->json([
@@ -90,8 +77,7 @@ class TimeController extends Controller
         $convert = array(
             'id' => $waktu->id,
             'tahun' => $waktu->tahun,
-            'start' => str_replace(' ', 'T', $waktu->start),
-            'end' => str_replace(' ', 'T', $waktu->end),
+            'status' => $waktu->status
         );
 
         return $convert;
@@ -100,25 +86,17 @@ class TimeController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'tahun' => 'required|unique:tm_times,tahun,' . $id,
-            'start' => 'required',
-            'end' => 'required'
+            'tahun' => 'required|unique:tm_times,tahun,' . $id
         ]);
 
         // get params
         $tahun = $request->tahun;
-        $start = $request->start;
-        $end = $request->end;
-
-        // convert
-        $timestampsStart = str_replace('T', ' ', $start);
-        $timestampsEnd = str_replace('T', ' ', $end);
+        $status = $request->status;
 
         $waktu = Time::find($id);
         $waktu->update([
             'tahun' => $tahun,
-            'start' => $timestampsStart,
-            'end' => $timestampsEnd
+            'status' => $status
         ]);
 
         return response()->json([
