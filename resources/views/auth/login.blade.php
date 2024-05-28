@@ -46,20 +46,25 @@
                     <div class="form-holder">
                         <span class="lnr lnr-user text-black-50"></span>
                         <input type="text" class="form-control-l" name="username" autocomplete="username" placeholder="Masukan Username" value="{{ old('username') }}" autofocus required>
-                        <div class="invalid-feedback fw-bold mt-2 mb-3" style="position: absolute;">
+                        <div class="invalid-feedback fw-bold fs-10 mt-2 mb-3" style="position: absolute;">
                             Username wajib diisi.
                         </div>
                     </div>
                     <div class="form-holder mt-4">
                         <span class="lnr lnr-lock text-black-50"></span>
                         <input type="password" class="form-control-l" name="password" placeholder="Masukan Password" required>
-                        <div class="invalid-feedback fw-bold mt-2" style="position: absolute;">
+                        <div class="invalid-feedback fs-10 fw-bold mt-2" style="position: absolute;">
                             Password wajib diisi.
                         </div>
                     </div>
                     @if (session('error'))
                     <div class="alert alert-danger fs-14 text-center fw-bold" style="margin-bottom: -20px !important; margin-top: 35px !important" role="alert">
                         Username / Password Salah.
+                    </div>
+                    @endif
+                    @if (count($errors) > 0)
+                    <div class="alert alert-danger fs-12 text-center" style="margin-bottom: -25px !important" role="alert">
+                        Username / Password salah!
                     </div>
                     @endif
                     <button type="submit" class="rounded">MASUK</button>

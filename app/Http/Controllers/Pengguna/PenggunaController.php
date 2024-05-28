@@ -183,8 +183,8 @@ class PenggunaController extends Controller
         $model_has_role->save();
 
         // Tahap 4
-        if ($request->opds) {
-            foreach ($request->opds as $key => $i) {
+        if ($opds) {
+            foreach ($opds as $key => $i) {
                 VerifikatorTempat::create([
                     'user_id' => $user->id,
                     'tempat_id' => $i

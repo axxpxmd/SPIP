@@ -70,16 +70,6 @@
                                             <label for="telp" class="col-form-label s-12 col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
                                             <input type="text" name="telp" id="telp" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                         </div>
-                                        <div class="form-group mb-1" id="display_perangkat_daerah">
-                                            <label class="col-form-label s-12 col-md-2">Perangkat Daerah <span class="text-danger ml-1">*</span></label>
-                                            <div class="col-md-6 p-0 bg-light">
-                                                <select name="opds[]" id="opds" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
-                                                    @foreach($opds as $key=>$opds)
-                                                    <option value="{{ $opds->id }}">{{ $opds->n_tempat }}</option>
-                                                    @endforeach
-                                                <select>
-                                            </div>
-                                        </div>
                                         <div class="form-group m-0">
                                             <label for="alamat" class="col-form-label s-12 col-md-2">Alamat<span class="text-danger ml-1">*</span></label>
                                             <input type="text" name="alamat" id="alamat" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
@@ -105,6 +95,18 @@
                                             <label for="telp" class="col-form-label s-12 col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
                                             <input type="text" name="telp" id="telp" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                         </div>
+                                        @if ($role_id == 6)
+                                        <div class="form-group mb-1" id="display_perangkat_daerah">
+                                            <label class="col-form-label s-12 col-md-2">Perangkat Daerah <span class="text-danger ml-1">*</span></label>
+                                            <div class="col-md-6 p-0 bg-light">
+                                                <select name="opds[]" id="opds" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
+                                                    @foreach($opds as $key=>$opds)
+                                                    <option value="{{ $opds->id }}">{{ $opds->n_tempat }}</option>
+                                                    @endforeach
+                                                <select>
+                                            </div>
+                                        </div>
+                                        @endif
                                         <div class="form-group mt-2">
                                             <div class="col-md-2"></div>
                                             <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
