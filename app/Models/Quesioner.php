@@ -28,6 +28,18 @@ class Quesioner extends Model
      * QUERY
      */
 
+    // table
+    public static function getDataForTable($tahun_id, $indikator_id)
+    {
+        return Quesioner::when($tahun_id, function ($q) use ($tahun_id) {
+            return $q->where('tahun_id', $tahun_id);
+        })
+            ->when($indikator_id, function ($q) use ($indikator_id) {
+                return $q->where('indikator_id', $indikator_id);
+            })
+            ->orderBy('id', 'DESC')->get();
+    }
+
     //  get total quesioner by user_id, tahun_id and zona_id
     public static function getTotal($tahunId, $zonaId)
     {

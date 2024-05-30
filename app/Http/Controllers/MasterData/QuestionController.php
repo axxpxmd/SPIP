@@ -68,9 +68,7 @@ class QuestionController extends Controller
         $n_question = $request->n_question;
 
         foreach ($n_question as $key => $i) {
-            // save to table 
-
-
+            // save to table
             $data = new Pertanyaan();
             $data->indikator_id = $indikator_id;
             $data->n_question = $n_question[$key];

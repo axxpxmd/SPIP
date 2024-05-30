@@ -49,13 +49,7 @@ class QuesionerController extends Controller
         $indikator_id = $request->indikator_id;
         $tahun_id = $request->tahun_id;
 
-        $quesioner = Quesioner::when($tahun_id, function ($q) use ($tahun_id) {
-            return $q->where('tahun_id', $tahun_id);
-        })
-            ->when($indikator_id, function ($q) use ($indikator_id) {
-                return $q->where('indikator_id', $indikator_id);
-            })
-            ->orderBy('id', 'DESC')->get();
+        $quesioner = Quesioner::getDataForTable($tahun_id, $indikator_id);
 
         return DataTables::of($quesioner)
             ->addColumn('action', function ($p) {
