@@ -23,8 +23,7 @@
                             <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <th width="5%">No</th>
-                                    <th width="80%">Jawaban</th>
-                                    <th width="5%">Point</th>
+                                    <th width="85%">Jawaban</th>
                                     <th width="10%"></th>
                                 </thead>
                                 <tbody></tbody>
@@ -46,10 +45,6 @@
                                     <div class="form-group m-0">
                                         <label for="jawaban" class="col-form-label s-12 col-md-4">Jawaban<span class="text-danger ml-1">*</span></label>
                                         <textarea name="jawaban" id="jawaban" cols="10" rows="5" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
-                                    </div>
-                                    <div class="form-group m-0">
-                                        <label for="nilai" class="col-form-label s-12 col-md-4">Point<span class="text-danger ml-1">*</span></label>
-                                        <input type="text" name="nilai" id="nilai" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                     </div>
                                     <div class="form-group mt-2">
                                         <div class="col-md-4"></div>
@@ -82,7 +77,6 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'jawaban', name: 'jawaban'},
-            {data: 'nilai', name: 'nilai', className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
@@ -141,7 +135,6 @@
         $.get("{{ route($route.'edit', ':id') }}".replace(':id', id), function(data){
             $('#id').val(data.id);
             $('#jawaban').val(data.jawaban).focus();
-            $('#nilai').val(data.nilai);
         }, "JSON").fail(function(){
             reload();
         });

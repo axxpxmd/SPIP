@@ -59,15 +59,16 @@ Route::group(['middleware' => ['auth']], function () {
         // indikator
         Route::resource('indikator', 'IndikatorController');
         Route::post('indikator/api', 'IndikatorController@api')->name('indikator.api');
+
         // Quesioner
         Route::resource('kuesioner', 'QuesionerController');
         Route::post('kuesioner/api', 'QuesionerController@api')->name('kuesioner.api');
-        Route::get('check', 'QuesionerController@check')->name('kuesioner.check');
-        Route::get('kuesioner/getJawaban/{id}', 'QuesionerController@getJawaban')->name('kuesioner.getJawaban');
         Route::get('kuesioner/getPertanyaan/{id}', 'QuesionerController@getPertanyaan')->name('kuesioner.getPertanyaan');
+
         // Answer
         Route::resource('answer', 'AnswerController');
         Route::post('answer/api', 'AnswerController@api')->name('answer.api');
+
         // Pertanyaan
         Route::resource('pertanyaan', 'QuestionController');
         Route::post('pertanyaan/api', 'QuestionController@api')->name('pertanyaan.api');

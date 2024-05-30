@@ -65,15 +65,15 @@
             </a>
         </li>
         <li class="no-b">
-            <a href="{{ route('pertanyaan.index') }}">
-                <i class="icon icon-question mr-2 text-green s-18"></i>
-                <span>Pertanyaan</span>
-            </a>
-        </li>
-        <li class="no-b">
             <a href="{{ route('answer.index') }}">
                 <i class="icon icon-question_answer text-purple s-18"></i>
                 <span>Jawaban</span>
+            </a>
+        </li>
+        <li class="no-b">
+            <a href="{{ route('pertanyaan.index') }}">
+                <i class="icon icon-question mr-2 text-green s-18"></i>
+                <span>Pertanyaan</span>
             </a>
         </li>
         <li class="no-b">

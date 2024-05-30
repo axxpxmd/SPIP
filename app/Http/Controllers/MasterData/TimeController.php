@@ -5,12 +5,12 @@ namespace App\Http\Controllers\MasterData;
 use DataTables;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 
 use App\Http\Controllers\Controller;
-use App\Models\Quesioner;
+
 // Models
 use App\Models\Time;
+use App\Models\Quesioner;
 
 class TimeController extends Controller
 {

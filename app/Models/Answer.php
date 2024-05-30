@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Answer extends Model
 {
     protected $table = 'tm_answers';
-    protected $fillable = ['id', 'jawaban', 'nilai', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'jawaban', 'created_at', 'updated_at'];
 
     public function answerOnQuesioner()
     {

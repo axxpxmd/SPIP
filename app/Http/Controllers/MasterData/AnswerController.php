@@ -31,7 +31,7 @@ class AnswerController extends Controller
 
     public function api()
     {
-        $answers = Answer::select('id', 'jawaban', 'nilai')->with(['answerOnQuesioner'])->orderBy('id', 'DESC')->get();
+        $answers = Answer::select('id', 'jawaban')->with(['answerOnQuesioner'])->orderBy('id', 'DESC')->get();
 
         return DataTables::of($answers)
             ->addColumn('action', function ($p) {
@@ -51,17 +51,14 @@ class AnswerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jawaban' => 'required|unique:tm_answers,jawaban',
-            'nilai' => 'required'
+            'jawaban' => 'required|unique:tm_answers,jawaban'
         ]);
 
         // get param
         $jawawan = $request->jawaban;
-        $nilai = $request->nilai;
 
         $data = new Answer();
         $data->jawaban = $jawawan;
-        $data->nilai = $nilai;
         $data->save();
 
         return response()->json([
@@ -71,7 +68,7 @@ class AnswerController extends Controller
 
     public function edit($id)
     {
-        $data = Answer::select('id', 'jawaban', 'nilai')->where('id', $id)->first();
+        $data = Answer::select('id', 'jawaban')->where('id', $id)->first();
 
         return $data;
     }
@@ -79,18 +76,15 @@ class AnswerController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jawaban' => 'required|unique:tm_answers,jawaban,' . $id,
-            'nilai' => 'required'
+            'jawaban' => 'required|unique:tm_answers,jawaban,' . $id
         ]);
 
         // get param
         $jawawan = $request->jawaban;
-        $nilai = $request->nilai;
 
         $data = Answer::find($id);
         $data->update([
-            'jawaban' => $jawawan,
-            'nilai' => $nilai
+            'jawaban' => $jawawan
         ]);
 
         return response()->json([

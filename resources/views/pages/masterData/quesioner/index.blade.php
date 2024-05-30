@@ -83,8 +83,8 @@
                         <div class="card">
                             <h6 class="card-header"><strong>Tambah Data</strong></h6>
                             <div class="card-body">
-                                <form class="needs-validation" id="form" method="GET"  enctype="multipart/form-data" novalidate>
-                                    {{ method_field('GET') }}
+                                <form class="needs-validation" id="form" method="POST"  enctype="multipart/form-data" novalidate>
+                                    {{ method_field('POST') }}
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="form-group m-0">
@@ -111,18 +111,13 @@
                                             </div>
                                             <div class="form-group mt-1">
                                                 <label class="col-form-label s-12 col-md-2">Pertanyaan<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-9 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" name="question_id" id="pertanyaan_id" autocomplete="off">
-                                                    </select>
+                                                <div class="col-md-9 p-0 mt-2">
+                                                    <ol id="listQuestion" style="margin-left: -25px !important"></ol>
                                                 </div>
-                                            </div>
-                                            <div class="form-group mt-1">
-                                                <label for="total_jawaban" class="col-form-label s-12 col-md-2">Total Jawaban<span class="text-danger ml-1">*</span></label>
-                                                <input type="number" name="total_jawaban" id="total_jawaban" value="6" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group mt-2">
                                                 <div class="col-md-2"></div>
-                                                <button type="submit" class="btn btn-primary btn-sm"><i class="icon-arrow_forward mr-2"></i>Selanjutnya</button>
+                                                <button type="submit" class="btn btn-primary btn-sm"><i class="icon-arrow_forward mr-2"></i>Generate</button>
                                                 <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
                                             </div>
                                         </div>
@@ -212,23 +207,22 @@
     } );
 
     $('#indikator_id').on('change', function(){
+        $('#listQuestion').html("Loading...");
         val = $(this).val();
         option = "<option value=''>&nbsp;</option>";
         if(val == ""){
-            $('#pertanyaan_id').html(option);
+            $('#listQuestion').html("");
         }else{
-            $('#pertanyaan_id').html("<option value=''>Loading...</option>");
             url = "{{ route('kuesioner.getPertanyaan', ':id') }}".replace(':id', val);
             $.get(url, function(data){
+                $('#listQuestion').html("");
                 if(data){
                     $.each(data, function(index, value){
-                        option += "<option value='" + value.id + "'>" + value.n_question +"</li>";
+                        val = "'" + value.name + "'";
+                        $('#listQuestion').append('<li>' + value.n_question + '</li>');
                     });
-                    $('#pertanyaan_id').empty().html(option);
-
-                    $("#pertanyaan_id").val($("#pertanyaan_id option:first").val()).trigger("change.select2");
                 }else{
-                    $('#pertanyaan_id').html(option);
+                    $('#listQuestion').html("");
                 }
             }, 'JSON');
         }
@@ -242,13 +236,11 @@
         save_method = "add";
         $('#form').trigger('reset');
         $('#reset').show();
-        $('#pertanyaan_id').val("");
-        $('#pertanyaan_id').trigger('change.select2');
         $('#indikator_id').val("");
         $('#indikator_id').trigger('change.select2');
         $('#tahun_id').val("");
         $('#tahun_id').trigger('change.select2');
-        $('#total_jawaban').val("");
+        $('#listQuestion').html("");
     }
 
     $('#form').on('submit', function (e) {
@@ -257,21 +249,19 @@
             event.stopPropagation();
         }
         else{
-            var tahunId = $('#tahun_id').val();
-            var indikatorId = $('#indikator_id').val();
-            var questionId = $('#pertanyaan_id').val();
-            var totalJawaban = $('#total_jawaban').val();
+            $('#alert').html('');
+            url = "{{ route($route.'store') }}",
             $.ajax({
-                type: 'GET',
-                url : "{{ route($route.'check') }}",
-                data: {
-                    tahun_id: tahunId,
-                    indikator_id : indikatorId,
-                    question_id: questionId,
-                    total_jawaban : totalJawaban
-                },
-                success: function (data) {
-                    window.location = "{{ route($route.'create') }}?tahun_id=" + data.tahun_id + "&indikator_id=" + data.indikator_id + "&question_id=" + data.question_id + "&total_jawaban=" + data.total_jawaban;
+                url : url,
+                type : 'POST',
+                data: new FormData(($(this)[0])),
+                contentType: false,
+                processData: false,
+                success : function(data) {
+                    console.log(data);
+                    $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
+                    $('#dataTable').DataTable().ajax.reload();
+                    add();
                 },
                 error : function(data){
                     err = '';
@@ -283,7 +273,8 @@
                     }
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                 }
-            }); return false;
+            });
+            return false;
         }
         $(this).addClass('was-validated');
     });
