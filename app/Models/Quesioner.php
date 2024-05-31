@@ -40,13 +40,12 @@ class Quesioner extends Model
             ->orderBy('id', 'DESC')->get();
     }
 
-    //  get total quesioner by user_id, tahun_id and zona_id
-    public static function getTotal($tahunId, $zonaId)
+    //  get total quesioner by user_id, tahun_id
+    public static function getTotal($tahunId)
     {
         $data = Quesioner::select('tm_indikators.id', 'tm_quesioners.id as quesionerId', 'indikator_id', 'tm_indikators.n_indikator', 'tm_indikators.deskripsi')
             ->join('tm_indikators', 'tm_indikators.id', '=', 'tm_quesioners.indikator_id')
             ->where('tm_quesioners.tahun_id', $tahunId)
-            ->where('tm_indikators.zona_id', $zonaId)
             ->count();
 
         return $data;

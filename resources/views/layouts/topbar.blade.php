@@ -32,7 +32,7 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown custom-dropdown user user-menu ">
                         <a href="#" class="nav-link" data-toggle="dropdown">
-                            <img height="30" width="30" style="margin-top: -10px" class="rounded-circle img-circular" src="{{ config('app.sftp_src') . 'images/ava/' . Auth::user()->pegawai->foto }}" alt="User Image">
+                            <img height="30" width="30" style="margin-top: -10px" class="rounded-circle img-circular" src="{{ config('app.sftp_src') . 'ava/' . Auth::user()->pegawai->foto }}" alt="User Image">
                             <i class="icon-more_vert"></i>
                         </a>
                         <div class="dropdown-menu p-4 dropdown-menu-right" style="width:255px">

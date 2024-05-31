@@ -7,17 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tempat extends Model
 {
     protected $table = 'tm_places';
-    protected $fillable = ['id', 'zona_id', 'alamat', 'n_tempat', 'status', 'created_at', 'updated_at'];
-
-    public function zona()
-    {
-        return $this->belongsTo(Zona::class, 'zona_id');
-    }
-
-    public function indikator()
-    {
-        return $this->belongsTo(Indikator::class, 'id', 'zona_id');
-    }
+    protected $fillable = ['id', 'alamat', 'n_tempat', 'status', 'created_at', 'updated_at'];
 
     public function pegawai()
     {

@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\Time;
-use App\Models\Zona;
 use App\Models\Answer;
 use App\Models\Indikator;
 use App\Models\Quesioner;
@@ -31,7 +30,6 @@ class QuesionerController extends Controller
         $indikators = Indikator::select('id', 'n_indikator')->get();
         $indikators = Indikator::select('id', 'n_indikator')->get();
 
-        $zonas = Zona::select('id', 'n_zona')->get();
         $jawabans = Answer::select('id', 'jawaban')->get();
 
         return view($this->view . 'index', compact(
@@ -39,7 +37,6 @@ class QuesionerController extends Controller
             'route',
             'indikators',
             'tahuns',
-            'zonas',
             'jawabans'
         ));
     }

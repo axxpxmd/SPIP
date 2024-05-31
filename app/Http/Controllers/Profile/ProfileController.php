@@ -28,7 +28,7 @@ use App\Models\Pegawai;
 class ProfileController extends Controller
 {
     protected $view  = 'pages.profile.';
-    protected $path  = 'images/ava/';
+    protected $path  = 'ava/';
     protected $title = 'Profile';
     protected $route = 'profile.';
 
@@ -85,12 +85,12 @@ class ProfileController extends Controller
             // Proses Saved Foto
             $file     = $request->file('photo');
             $fileName = time() . "." . $file->getClientOriginalName();
-            $request->file('photo')->move("images/ava/", $fileName);
+            $request->file('photo')->move("ava/", $fileName);
 
             if ($adminDetail->photo != 'default.png') {
                 // Proses Delete Foto
                 $exist = $adminDetail->photo;
-                $path  = "images/ava/" . $exist;
+                $path  = "ava/" . $exist;
                 \File::delete(public_path($path));
             }
 

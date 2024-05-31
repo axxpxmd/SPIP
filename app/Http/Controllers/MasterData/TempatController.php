@@ -61,7 +61,6 @@ class TempatController extends Controller
         $tempat = new Tempat();
         $tempat->n_tempat = $n_tempat;
         $tempat->alamat = $alamat;
-        $tempat->zona_id = 3;
         $tempat->save();
 
         return response()->json([

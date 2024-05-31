@@ -28,14 +28,13 @@
                 @endforeach
             </ul>
         </div>
-        @endif 
+        @endif
         <div class="tab-content my-3" id="pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
                         <div id="alert"></div>
                         <div class="card">
-                            {{-- <h6 class="card-header"><strong>Tambah Data</strong></h6> --}}
                             <div class="card-body">
                                 <form class="needs-validation" action="{{ route($route.'create') }}" method="GET"  novalidate>
                                     <div class="form-row form-inline">

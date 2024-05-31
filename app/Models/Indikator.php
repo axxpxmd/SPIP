@@ -7,12 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Indikator extends Model
 {
     protected $table = 'tm_indikators';
-    protected $fillable = ['id', 'zona_id', 'n_indikator', 'deskripsi', 'created_at', 'updated_at'];
-
-    public function zona()
-    {
-        return $this->belongsTo(Zona::class, 'zona_id');
-    }
+    protected $fillable = ['id', 'n_indikator', 'deskripsi', 'created_at', 'updated_at'];
 
     public function quesioner()
     {

@@ -32,16 +32,6 @@ class Pegawai extends Model
         return $data;
     }
 
-    //
-    public static function getTotalUserByZone($zonaId)
-    {
-        $data = Pegawai::join('tm_places', 'tm_places.id', '=', 'tm_pegawais.tempat_id')
-            ->where('tm_places.zona_id', $zonaId)
-            ->count();
-
-        return $data;
-    }
-
     public function quesionerResult()
     {
         return $this->hasMany(TmResult::class, 'user_id', 'user_id');

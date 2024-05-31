@@ -25,12 +25,12 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold" id="exampleModalLongTitle">Tata Cara Upload File</h5>
+                <h5 class="modal-title font-weight-bold text-black" id="exampleModalLongTitle">Tata Cara Upload File</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-black">
                 <ol>
                     <li>Format file yang diperbolehkan berupa gambar(png,jpg,jpeg dll), file(docx,xlx,zip,rar dll).</li>
                     <li>Untuk file yang formatnya video, silahkan masukin link video pada kolom keterangan.</li>

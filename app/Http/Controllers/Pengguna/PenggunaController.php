@@ -33,7 +33,7 @@ class PenggunaController extends Controller
 {
     protected $route = 'pengguna.';
     protected $view  = 'pages.pengguna.';
-    protected $path  = 'images/ava/';
+    protected $path  = 'ava/';
     protected $title = 'Pengguna';
 
     public function index()

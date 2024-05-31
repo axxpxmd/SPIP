@@ -37,7 +37,7 @@
                 </a>
                 <div class="user-panel p-3 light mb-2">
                     <div class="float-left image pl-1">
-                        <img width="60" height="60" class="rounded-circle img-circular mr-2" src="{{ config('app.sftp_src') . 'images/ava/' . Auth::user()->pegawai->foto }}" alt="User Image">
+                        <img width="60" height="60" class="rounded-circle img-circular mr-2" src="{{ config('app.sftp_src') . 'ava/' . Auth::user()->pegawai->foto }}" alt="User Image">
                     </div>
                     <div class="float-left info mt-2 pl-2">
                         <h6 class="font-weight-light mb-1">{{ Auth::user()->username }}</h6>
