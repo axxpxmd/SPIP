@@ -15,7 +15,7 @@
             <div class="row justify-content-between">
                 <ul role="tablist" class="nav nav-material nav-material-white responsive-tab">
                     <li>
-                        <a class="nav-link" href="{{ route($route.$routeBack) }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
+                        <a class="nav-link" href="#"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                 </ul>
             </div>
@@ -86,116 +86,6 @@
                                         <label class="col-sm-2 fs-13"><strong>Status Verifikasi </strong></label>
                                         <label class="col-sm-10 fs-13">: {{ $countResultVerif }} dari {{ $countQuesioners }} Pertanyaan | {{ $getPercentVerif }}%</label>
                                     </div>
-                                    <hr>
-                                    @if ($countResultVerif == $countQuesioners)
-                                    <div class="row mb-2">
-                                        <label class="col-sm-2 fs-13"><strong>File LHE Verifikator</strong></label>
-                                        <label class="col-sm-10 fs-13">
-                                            @if ($file_lhe)
-                                                <a href="{{ config('app.sftp_src').$path.$file_lhe->file }}" target="_blank" class="mr-4"><i class="icon icon-link2 mr-2"></i>Lihat File</a>
-                                                @if ($role_id != 8)
-                                                <button class="font-weight-bold btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#uploadLHE"><i class="icon icon-file_upload"></i>Edit LHE</button>
-                                                @endif
-                                            @else
-                                                @if ($role_id != 8)
-                                                <button class="font-weight-bold btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#uploadLHE"><i class="icon icon-file_upload"></i>Upload LHE</button>
-                                                @endif
-                                            @endif
-                                        </label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-sm-2 fs-13"><strong>Tindak Lanjut File LHE</strong></label>
-                                        <label class="col-sm-10 fs-13">
-                                            @if ($file_lhe)
-                                                @if ($file_lhe_tindak_lanjut)
-                                                    <a href="{{ config('app.sftp_src').$path.$file_lhe_tindak_lanjut->file }}" target="_blank" class="btn btn-sm btn-secondary mr-2"><i class="icon icon-link"></i>Download File</a>
-                                                @else
-                                                <i>belum ditindak lanjut</i>
-                                                @endif
-                                            @else
-                                                -
-                                            @endif
-                                        </label>
-                                    </div>
-                                    <hr>
-                                    <div class="row mt-2">
-                                        <label class="col-sm-2 fs-13"></label>
-                                        <label class="col-sm-10 fs-13">
-                                            <a href="{{ route('verifikasi.cetakReport', array('tahun_id' => $tahunId, 'user_id' => $userId)) }}" target="_blank" class="btn btn-sm btn-primary mr-2"><i class="icon icon-print"></i>Cetak LKE</a>
-                                            <a href="{{ route('verifikasi.inputDataTahunSebelum', array('tahun_id' => $tahunId, 'user_id' => $userId)) }}" target="_blank" class="btn btn-sm btn-success mr-2"><i class="icon icon-print"></i>Cetak Rekap LKE</a>
-                                        </label>
-                                    </div>
-                                    @endif
-                                    <p class="text-black font-weight-bold p-2" style="background-color: #F5F8FA">Total Nilai Per Indikator</p>
-                                    @php
-                                        $nilaiAkuntabilitas = 0;
-                                    @endphp
-                                    @foreach ($getIndikator as $indexg => $g)
-                                        @php
-                                            $getIdIndikator = App\TmResult::select('tm_quesioners.indikator_id as indikator_id')
-                                                ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-                                                ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
-                                                ->where('tm_quesioners.indikator_t', $g->indikator_t)
-                                                ->where('tm_results.user_id', $userId)
-                                                ->where('tm_quesioners.tahun_id', $tahunId)
-                                                ->groupBy('tm_quesioners.indikator_id')
-                                                ->get();
-                                                $kk = 0;
-                                                $detailNilai = [];
-                                        @endphp
-                                        @foreach ($getIdIndikator as $keyIn => $in)
-                                            @php
-                                                $nilaiIndikator1 = App\TmResult::select(DB::raw("sum(nilai_awal) as nilai_awal"), DB::raw("sum(nilai_akhir) as nilai_akhir"), 'tm_quesioners.bobot_sub_indikator as bobot_sub_indikator', 'pengali_bobot')
-                                                    ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-                                                    ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
-                                                    ->where('tm_quesioners.indikator_id', $in->indikator_id)
-                                                    ->where('tm_results.user_id', $userId)
-                                                    ->where('tm_quesioners.tahun_id', $tahunId)
-                                                    ->orderBy('tm_results.status', 'ASC')
-                                                    ->first();
-                                                $nilaiAkuntabilitas += App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                if ($g->indikator_t == 'Perencanaan Kinerja') {
-                                                    $kk += App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                    $detailNilai[$keyIn] = App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                }elseif($g->indikator_t == 'Pengukuran Kinerja'){
-                                                    $kk += App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                    $detailNilai[$keyIn] = App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                }elseif($g->indikator_t == 'Pelaporan Kinerja'){
-                                                    $kk += App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                    $detailNilai[$keyIn] = App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                }elseif($g->indikator_t == 'Evaluasi Akuntabilitas Kinerja Internal'){
-                                                    $kk += App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                    $detailNilai[$keyIn] = App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator1->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator1->bobot_sub_indikator, $nilaiIndikator1->pengali_bobot );
-                                                }
-                                           @endphp
-                                        @endforeach
-                                        <p class="text-black m-0"> {{ $indexg+1 }}. {{ $g->indikator_t }}</p>
-                                        <div class="col-md-12 text-black">
-                                            <div class="row">
-                                                <label class="col-sm-2 fs-13">Bobot </label>
-                                                <label class="col-sm-10 fs-13 font-weight-bold">: {{ $g->bobot_indikator }}</label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="col-sm-2 fs-13">Nilai </label>
-                                                <label class="col-sm-10 fs-13">:
-                                                    <span class="font-weight-bold">{{ $kk }}</span>
-                                                    @if (count($detailNilai))
-                                                        <span class="ml-5">Detail Nilai</span> :
-                                                        @foreach ($detailNilai as $z)
-                                                            <span>( {{ $z }} )</span>
-                                                        @endforeach
-                                                    @endif
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                    <hr>
-                                    <div class="col-md-12 text-black">
-                                        <div class="row">
-                                            <label class="col-sm-2 fs-13 font-weight-bold">NILAI AKUNTABILITAS KINERJA </label>
-                                            <label class="col-sm-10 fs-13 font-weight-bold">: {{ $nilaiAkuntabilitas }} ( {{ App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBladeRekap($nilaiAkuntabilitas) }} ) </label>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -204,8 +94,7 @@
                             <div class="card-body">
                                 <div class="col-md-12">
                                     @php
-                                        $nilaiIndikator = App\TmResult::select(DB::raw("sum(nilai_awal) as nilai_awal"), DB::raw("sum(nilai_akhir) as nilai_akhir"), 'tm_quesioners.bobot_sub_indikator as bobot_sub_indikator', 'pengali_bobot')
-                                                ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+                                        $nilaiIndikator = App\TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                                                 ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
                                                 ->where('tm_quesioners.indikator_id', $i->id)
                                                 ->where('tm_results.user_id', $userId)
@@ -213,42 +102,13 @@
                                                 ->orderBy('tm_results.status', 'ASC')
                                                 ->first();
                                     @endphp
-                                    <div class="col-md-12 text-black">
-                                        <div class="row">
-                                            <label class="col-sm-2 fs-13"><strong>Nilai Awal</strong></label>
-                                            <label class="col-sm-10 fs-13">: {{ round($nilaiIndikator->nilai_awal, PHP_ROUND_HALF_UP, 2) }} ( {{ App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator->nilai_awal, PHP_ROUND_HALF_UP, 2)) }} )</label>
-                                        </div>
-                                        <div class="row mt-n1">
-                                            <label class="col-sm-2 fs-13"><strong>Nilai Akhir </strong></label>
-                                            <label class="col-sm-10 fs-13">:
-                                                {{ $nilaiIndikator->nilai_akhir }}
-                                                @php
-                                                    $nilaiHuruf = App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade($nilaiIndikator->nilai_akhir);
-                                                @endphp
-                                                ( {{ $nilaiHuruf }} )
-                                                ( {{ App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkPengaliBobot($nilaiHuruf, $nilaiIndikator->pengali_bobot) }} )
-                                            </label>
-                                        </div>
-                                        <div class="row mt-n1">
-                                            <label class="col-sm-2 fs-13"><strong>Nilai Bobot</strong></label>
-                                            <label class="col-sm-10 fs-13">
-                                                : {{ $nilaiIndikator->bobot_sub_indikator }}
-                                            </label>
-                                        </div>
-                                        <div class="row mt-n1">
-                                            <label class="col-sm-2 fs-13"><strong>Total Bobot Final</strong></label>
-                                            <label class="col-sm-10 fs-13">
-                                                : {{ App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkBobotPertanyaan(App\Http\Controllers\MasterVerifikasi\VerifikasiController::checkNilaiBlade(round($nilaiIndikator->nilai_akhir, PHP_ROUND_HALF_UP, 2)), $nilaiIndikator->bobot_sub_indikator, $nilaiIndikator->pengali_bobot ) }}
-                                            </label>
-                                        </div>
-                                    </div>
                                     <p class="font-weight-bold text-black"> {{ $index+1 }}. {{ $i->n_indikator }}</p>
                                     <div class="ml-2 mb-2" style="margin-top: -15px !important">
                                         <span>{{ $i->deskripsi }}</span>
                                     </div>
                                     <ol>
                                         @php
-                                             $datas = App\TmResult::select('tm_results.id as id','status_revisi','status_kirim', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'nilai_akhir','nilai_awal', 'status', 'tm_results.answer_id as answer_id', 'message', 'answer_id_revisi', 'keterangan')
+                                             $datas = App\TmResult::select('tm_results.id as id','status_revisi','status_kirim', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'tm_results.answer_id as answer_id', 'keterangan_revisi', 'answer_id_revisi', 'keterangan')
                                                         ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                                                         ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
                                                         ->where('tm_quesioners.indikator_id', $i->id)
@@ -266,10 +126,7 @@
                                             @endphp
                                             <div id="pertanyaanDiv{{ $index }}{{ $indexq }}">
                                                 <li type="disc" class="text-black font-weight-normal mt-2">{{ $q->n_question }}
-                                                    @if ($q->status == 1)
-                                                        <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i> <span class="font-weight-bold">({{ $q->nilai_akhir }})</span>
-                                                    @endif
-                                                    @if ($q->status_kirim == 0 && $q->message != null)
+                                                    @if ($q->status_kirim == 0 && $q->keterangan_revisi != null)
                                                     <span class="text-danger font-weight-bold">( Sedang Direvisi )</span>
                                                     @endif
                                                 </li>
@@ -298,13 +155,7 @@
                                             </div>
                                             <div class="mb-4">
                                                 <div class="mt-1">
-                                                    <span class="text-danger"><strong class="text-black">Penjelasan :</strong> {{ $q->message }}</span>
-                                                </div>
-                                                <div class="mt-1">
-                                                    <span class=""><strong class="text-black">Nilai Awal :</strong> {{ round($q->nilai_awal, 2) }}</span>
-                                                </div>
-                                                <div class="mt-1 mb-2">
-                                                    <span class=""><strong class="text-black">Nilai Akhir :</strong> {{ $q->nilai_akhir }}</span>
+                                                    <span class="text-danger"><strong class="text-black">Penjelasan :</strong> {{ $q->keterangan_revisi }}</span>
                                                 </div>
                                                 @php
                                                     $element = $index.$indexq;

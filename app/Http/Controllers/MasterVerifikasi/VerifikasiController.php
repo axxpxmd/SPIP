@@ -94,47 +94,6 @@ class VerifikasiController extends Controller
             ->toJson();
     }
 
-    public static function checkNilaiAkhir($user_id)
-    {
-        $dataCheck = TmResult::select('id', 'quesioner_id', 'answer_id', 'answer_id_revisi')
-            ->whereNotNull('answer_id_revisi')
-            ->with(['quesioner'])
-            ->where('user_id', $user_id)
-            ->get();
-
-        foreach ($dataCheck as $i) {
-            $indikator_id    = $i->quesioner->indikator_id;
-            $totalPertanyaan = Quesioner::where('indikator_id', $indikator_id)->count();
-
-            $getNilai   = Answer::select('nilai')->where('id', $i->answer_id_revisi)->first();
-            $nilai_akhir = round($getNilai->nilai / $totalPertanyaan, 2);
-
-            TmResult::where('id', $i->id)->update([
-                'nilai_akhir' => $nilai_akhir
-            ]);
-        }
-    }
-
-    public static function checkNilaiAwal($user_id)
-    {
-        $data = TmResult::select('id', 'quesioner_id', 'answer_id')
-            ->where('user_id', $user_id)
-            ->with(['quesioner'])
-            ->get();
-
-        foreach ($data as $i) {
-            $indikator_id    = $i->quesioner->indikator_id;
-            $totalPertanyaan = Quesioner::where('indikator_id', $indikator_id)->count();
-
-            $getNilai   = Answer::select('nilai')->where('id', $i->answer_id)->first();
-            $nilai_awal = round($getNilai->nilai / $totalPertanyaan, 2);
-
-            TmResult::where('id', $i->id)->update([
-                'nilai_awal' => $nilai_awal
-            ]);
-        }
-    }
-
     public function show(Request $request)
     {
         $id = $request->user_id;
@@ -142,7 +101,6 @@ class VerifikasiController extends Controller
         $pegawai = Pegawai::where('user_id', $id)->first();
         $userId  = $id;
         $nTempat = $pegawai->tempat->n_tempat;
-        $zonaId  = $pegawai->tempat->zona_id;
         $nKepala = $pegawai->nama_kepala;
         $jKepala = $pegawai->jabatan_kepala;
         $alamat  = $pegawai->alamat;
@@ -150,71 +108,39 @@ class VerifikasiController extends Controller
         $nOperator = $pegawai->nama_operator;
         $jOperator = $pegawai->jabatan_operator;
         $path  = $this->path;
-        $email = Auth::user()->pegawai->email;
+        $email = $pegawai->email;
         $nama_instansi = $pegawai->nama_instansi;
         $route = $this->route;
-
-        // check nilai akhir
-        $this->checkNilaiAkhir($request->user_id);
-        $this->checkNilaiAwal($request->user_id);
-
-        $zonaId = $pegawai->tempat->zona_id;
-        if ($zonaId == 1) {
-            $title = 'Kelurahan';
-            $routeBack = 'kelurahan';
-        } elseif ($zonaId == 2) {
-            $title = 'Sekolah';
-            $routeBack = 'sekolah';
-        } elseif ($zonaId == 3) {
-            $title = 'Perangkat Daerah';
-            $routeBack = 'puskesmas';
-        }
 
         $tahunId = $request->tahun_id;
         $year = Time::where('id', $tahunId)->first();
         $tahun = $year->tahun;
 
-        $datas = TmResult::select('tm_results.id as id', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'nilai_akhir', 'status', 'answer_id_revisi', 'tm_results.answer_id as answer_id', 'message')
+        $datas = TmResult::select('tm_results.id as id', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'answer_id_revisi', 'tm_results.answer_id as answer_id', 'keterangan_revisi')
             ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
             ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
             ->where('tm_results.user_id', $userId)
             ->where('tm_quesioners.tahun_id', $tahunId)
             ->get();
 
-        $getNilai = TmResult::getNilai($userId, $tahunId);
-        $getNilaiVerif = TmResult::getNilaiVerif($userId, $tahunId);
-
         $indikatorArray = TmResult::indikatorArray($userId, $tahunId);
         $indikators = Indikator::whereIn('id', $indikatorArray)->get();
-        // $indikators->appends(['tahun_id' => $tahunId, 'user_id' => $id]);
 
         $questionArray = TmResult::questionArray($userId, $tahunId);
 
-        $getIndikator = Quesioner::groupBy('indikator_t')->orderBy('id', 'ASC')->get();
-
         // ETC
-        $countQuesioners = Quesioner::getTotal($tahunId, $zonaId);
+        $countQuesioners = Quesioner::getTotal($tahunId);
         $countResult = TmResult::getTotal($tahunId, $userId);
         $getPercent = round($countResult / $countQuesioners * 100);
 
         $countResultVerif = TmResult::getTotalVerif($tahunId, $userId);
         $getPercentVerif = round($countResultVerif / $countQuesioners * 100);
 
-        $nilai_awal = TmResult::select(DB::raw("sum(nilai_awal) as nilai"))->where('user_id', $userId)->first();
-
-        $checkNIlaiAkhir = $this->checkNilai(round($getNilaiVerif->nilai_akhir, PHP_ROUND_HALF_UP, 2));
-        $checkNilaiAwal = $this->checkNilai(round($nilai_awal->nilai, PHP_ROUND_HALF_UP, 2));
-
-        $file_lhe = FileLhe::where('user_id', $userId)->where('tahun_id', $tahunId)->where('status', 0)->first();
-        $file_lhe_tindak_lanjut = FileLhe::where('user_id', $userId)->where('tahun_id', $tahunId)->where('status', 1)->first();
-
         $role_id = Auth::user()->modelHasRole->role_id;
+        $title = 'Perangkat Daerah';
 
         return view('pages.verifikasi.show', compact(
             'role_id',
-            'file_lhe',
-            'checkNIlaiAkhir',
-            'checkNilaiAwal',
             'id',
             'userId',
             'nTempat',
@@ -224,14 +150,12 @@ class VerifikasiController extends Controller
             'jKepala',
             'title',
             'route',
-            'getNilai',
             'indikators',
             'tahunId',
             'questionArray',
             'path',
             'nama_instansi',
             'tahun',
-            'routeBack',
             'nOperator',
             'jOperator',
             'email',
@@ -240,11 +164,7 @@ class VerifikasiController extends Controller
             'getPercent',
             'countResultVerif',
             'getPercentVerif',
-            'getNilaiVerif',
-            'datas',
-            'nilai_awal',
-            'getIndikator',
-            'file_lhe_tindak_lanjut'
+            'datas'
         ));
     }
 
@@ -383,9 +303,6 @@ class VerifikasiController extends Controller
             'status_revisi' => 1,
             'answer_id_revisi' => $request->answer_id_revisi
         ]);
-
-        // check nilai akhir
-        $this->checkNilaiAkhir($data->user_id);
 
         return redirect()
             ->route('verifikasi.show', array('tahun_id' => $data->quesioner->tahun_id, 'user_id' => $data->user_id, '#' . $element))
