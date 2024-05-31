@@ -47,7 +47,7 @@
                                         <span class="text-black font-weight-normal mt-2">1. {{ $data->quesioner->question->n_question }}</span>
                                         @foreach ($answers as $index2 => $a)
                                         <div class="form-check ml-3">
-                                            <input type="radio" class="form-check-input" name="answer_id_revisi" id="answer_id_revisi" onchange="nilaiAkhir()" value="{{ $a->answer->id }}" {{ $a->answer->id == $data->answer->id ? "checked" : "-" }}>
+                                            <input type="radio" class="form-check-input" name="answer_id_revisi" id="answer_id_revisi" value="{{ $a->answer->id }}" {{ $a->answer->id == $data->answer->id ? "checked" : "-" }}>
                                             <label class="form-check-label {{ $a->answer->id == $data->answer_id_revisi ? 'text-danger' : '-' }} fs-14">{{ $a->answer->jawaban }}  {{ $a->answer->id == $data->answer_id_revisi ? "( Jawaban Verifikator )" : "" }}</label>
                                         </div>
                                         @endforeach
@@ -71,20 +71,6 @@
                                 <div class="card-body">
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
-                                            <div class="form-group m-0">
-                                                <label for="nilai_awal" class="col-form-label s-12 col-md-2">Nilai Awal</label>
-                                                <input type="number" readonly name="nilai_awal" id="nilai_awal" class="form-control r-0 light s-12 col-md-6" value="{{ round($data->nilai_awal,2) }}" autocomplete="off" required/>
-                                            </div>
-                                            <div class="form-group m-0">
-                                                @if ($data->nilai_akhir)
-                                                <label for="nilai_akhir" class="col-form-label s-12 col-md-2">Nilai Akhir</label>
-                                                <input type="number" readonly name="nilai_akhir" id="nilai_akhir" class="form-control r-0 light s-12 col-md-6" value="{{ round($data->nilai_akhir,2) }}" autocomplete="off" required/>
-                                                @else
-                                                <label for="nilai_akhir" class="col-form-label s-12 col-md-2">Nilai Akhir</label>
-                                                <input type="number" readonly name="nilai_akhir" id="nilai_akhir" class="form-control r-0 light s-12 col-md-6" value="{{ round($data->nilai_akhir,2) }}" autocomplete="off" required/>
-                                                @endif
-
-                                            </div>
                                             <div class="form-group m-0">
                                                 <label for="pesan" class="col-form-label s-12 col-md-2">Penjelasan</label>
                                                 <textarea name="pesan" rows="3" id="pesan" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required>{{ $data->message }}</textarea>
@@ -120,19 +106,5 @@
             $("#errorAlert").slideUp(1000);
         });
     });
-
-    function nilaiAkhir(){
-        console.log('jala');
-        val = $("input[name='answer_id_revisi']:checked").val();
-
-            nilai = 0;
-            url = "{{ route('answer.edit', ':id') }}".replace(':id', val);
-            $.get(url, function(data){
-                nilai = data.nilai;
-
-                nilai_akhir = nilai / {{ $total_pertanyaan }};
-                $('#nilai_akhir').val(nilai_akhir.toFixed(2));
-            }, 'JSON');
-    }
 </script>
 @endsection

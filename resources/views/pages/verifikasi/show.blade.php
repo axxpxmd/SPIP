@@ -208,42 +208,6 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="uploadLHE" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form method="POST" action="{{ route('verifikasi.uploadLhe') }}" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                    {{ method_field('POST') }}
-                    <input type="hidden" name="user_id" value="{{ $id }}">
-                    <input type="hidden" name="tahun_id" value="{{ $tahunId }}">
-                    <div class="modal-header">
-                        <h6 class="modal-title font-weight-bold text-black fs-14" id="exampleModalLabel">
-                            UPLOAD FILE LHE
-                        </h6>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-row form-inline">
-                            <div class="col-md-12">
-                                <!-- user -->
-                                <div class="form-group m-0">
-                                    <label for="pesan" class="text-right s-12 col-md-3 font-weight-bold">File LHE<span class="text-danger ml-1">*</span></label>
-                                    <input type="file" name="file" id="file" class="form-control r-0 light s-12 col-md-9" required>
-                                </div>
-                                <div class="form-group mt-1">
-                                    <label class="col-md-3"></label>
-                                    <button class="btn btn-sm btn-success"><i class="icon-save mr-2"></i>Simpan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="revisi" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

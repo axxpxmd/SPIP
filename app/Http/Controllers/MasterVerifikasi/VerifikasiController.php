@@ -218,7 +218,6 @@ class VerifikasiController extends Controller
         $pegawai = Pegawai::where('user_id', $data->user_id)->first();
         $userId  = $data->user_id;
         $nTempat = $pegawai->tempat->n_tempat;
-        $zonaId  = $pegawai->tempat->zona_id;
         $nKepala = $pegawai->nama_kepala;
         $jKepala = $pegawai->jabatan_kepala;
         $alamat  = $pegawai->alamat;
@@ -230,19 +229,9 @@ class VerifikasiController extends Controller
         $path = $this->path;
         $element = $request->element;
 
-        $zonaId = $pegawai->tempat->zona_id;
-        if ($zonaId == 1) {
-            $title = 'Kelurahan';
-            $routeBack = 'show';
-        } elseif ($zonaId == 2) {
-            $title = 'Sekolah';
-            $routeBack = 'show';
-        } elseif ($zonaId == 3) {
-            $title = 'Perangkat Daerah';
-            $routeBack = 'show';
-        }
+        $title = 'Perangkat Daerah';
 
-        $getNilai = TmResult::select(DB::raw("sum(tm_answers.nilai) as nilai"), 'tm_quesioners.indikator_id')
+        $getNilai = TmResult::select('tm_quesioners.indikator_id')
             ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
             ->join('tm_answers', 'tm_answers.id', '=', 'tm_results.answer_id')
             ->where('user_id', $userId)
@@ -275,7 +264,6 @@ class VerifikasiController extends Controller
             'answers',
             'files',
             'path',
-            'routeBack',
             'tahunId',
             'total_pertanyaan',
             'element'
@@ -284,10 +272,6 @@ class VerifikasiController extends Controller
 
     public function sendRevisi(Request $request, $id)
     {
-        $request->validate([
-            'nilai_akhir' => 'required'
-        ]);
-
         $data = TmResult::find($id);
         $element = $request->element;
 
@@ -298,8 +282,7 @@ class VerifikasiController extends Controller
         }
 
         $data->update([
-            'message' => $request->pesan,
-            'nilai_akhir' => $request->nilai_akhir != 0 ? round($request->nilai_akhir, 2) : $data->nilai_awal,
+            'keterangan_revisi' => $request->pesan,
             'status_revisi' => 1,
             'answer_id_revisi' => $request->answer_id_revisi
         ]);
@@ -307,161 +290,6 @@ class VerifikasiController extends Controller
         return redirect()
             ->route('verifikasi.show', array('tahun_id' => $data->quesioner->tahun_id, 'user_id' => $data->user_id, '#' . $element))
             ->withSuccess('Data quesioner berhasil diubah.');
-    }
-
-    public function report(Request $request)
-    {
-        $tahunId = $request->tahun_id;
-        $zonaId = $request->zona_id;
-        $userId = $request->user_id;
-
-        $check = TmResult::indikatorArray($userId, $tahunId);
-
-        $indikators = Quesioner::select('tm_indikators.id', 'tm_quesioners.id as quesionerId', 'indikator_id', 'tm_indikators.n_indikator', 'tm_indikators.deskripsi')
-            ->join('tm_indikators', 'tm_indikators.id', '=', 'tm_quesioners.indikator_id')
-            ->where('tm_quesioners.tahun_id', $tahunId)
-            ->whereIn('tm_indikators.id', $check)
-            ->where('tm_indikators.zona_id', $zonaId)
-            ->groupBy('tm_quesioners.indikator_id')
-            // ->paginate(1);
-            ->get();
-
-        $dataUser = Pegawai::where('user_id', $userId)->first();
-
-        $checkQuestion = TmResult::select('tm_quesioners.question_id')
-            ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->where('user_id', $userId)
-            ->get()->toArray();
-
-        $getNilai = TmResult::getNilai($userId, $tahunId);
-        $getNilaiVerif = TmResult::getNilaiVerif($userId, $tahunId);
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'indikators',
-            'tahunId',
-            'checkQuestion',
-            'dataUser',
-            'userId',
-            'getNilai',
-            'getNilaiVerif'
-        ))->setPaper('a4', 'landscape');
-
-        return $pdf->download("Report " . $dataUser->tempat->n_tempat . ".pdf");
-    }
-
-    public static function checkPengaliBobot($nilai, $pengali_bobot)
-    {
-        $getValueArray  = \str_replace(['"', '[', ']'], '', $pengali_bobot);
-        $convertToArray = explode(',', $getValueArray);
-
-        if ($nilai == 'AA') {
-            return $convertToArray[0];
-        } elseif ($nilai == 'A') {
-            return $convertToArray[1];
-        } elseif ($nilai == 'BB') {
-            return $convertToArray[2];
-        } elseif ($nilai == 'B') {
-            return $convertToArray[3];
-        } elseif ($nilai == 'CC') {
-            return $convertToArray[4];
-        } elseif ($nilai == 'C') {
-            return $convertToArray[5];
-        } elseif ($nilai == 'D') {
-            return $convertToArray[6];
-        } elseif ($nilai == 'E') {
-            return $convertToArray[7];
-        }
-    }
-
-    public static function checkBobotPertanyaan($nilai, $bobot, $pengali_bobot)
-    {
-        $getValueArray  = \str_replace(['"', '[', ']'], '', $pengali_bobot);
-        $convertToArray = explode(',', $getValueArray);
-
-        if ($nilai == 'AA') {
-            return $convertToArray[0] * $bobot;
-        } elseif ($nilai == 'A') {
-            return $convertToArray[1] * $bobot;
-        } elseif ($nilai == 'BB') {
-            return $convertToArray[2] * $bobot;
-        } elseif ($nilai == 'B') {
-            return $convertToArray[3] * $bobot;
-        } elseif ($nilai == 'CC') {
-            return $convertToArray[4] * $bobot;
-        } elseif ($nilai == 'C') {
-            return $convertToArray[5] * $bobot;
-        } elseif ($nilai == 'D') {
-            return $convertToArray[6] * $bobot;
-        } elseif ($nilai == 'E') {
-            return $convertToArray[7] * $bobot;
-        }
-    }
-
-    public static function checkNilaiBlade($nilai)
-    {
-        $nilai = floor($nilai);
-
-        if ($nilai >= 100) {
-            return 'AA';
-        } elseif ($nilai < 100 && $nilai >= 90) {
-            return 'A';
-        } elseif ($nilai < 90 && $nilai >= 80) {
-            return  'BB';
-        } elseif ($nilai < 80 && $nilai >= 70) {
-            return 'B';
-        } elseif ($nilai < 70 && $nilai >= 60) {
-            return 'CC';
-        } elseif ($nilai < 60 && $nilai >= 50) {
-            return 'C';
-        } elseif ($nilai < 50 && $nilai >= 30) {
-            return 'D';
-        } elseif ($nilai < 30 && $nilai >= 0) {
-            return 'E';
-        }
-    }
-
-    public static function checkNilaiBladeRekap($nilai)
-    {
-        if ($nilai > 90 && $nilai <= 100) {
-            return 'AA';
-        } elseif ($nilai > 80 && $nilai <= 90) {
-            return 'A';
-        } elseif ($nilai > 70 && $nilai <= 80) {
-            return 'BB';
-        } elseif ($nilai > 60 && $nilai <= 70) {
-            return 'B';
-        } elseif ($nilai > 50 && $nilai <= 60) {
-            return 'CC';
-        } elseif ($nilai > 30 && $nilai <= 50) {
-            return 'C';
-        } elseif ($nilai > 0 && $nilai <= 30) {
-            return 'D';
-        }
-    }
-
-    public function checkNilai($nilai)
-    {
-        $nilai = floor($nilai);
-
-        if ($nilai >= 100) {
-            return 'AA';
-        } elseif ($nilai < 100 && $nilai >= 90) {
-            return 'A';
-        } elseif ($nilai < 90 && $nilai >= 80) {
-            return  'BB';
-        } elseif ($nilai < 80 && $nilai >= 70) {
-            return 'B';
-        } elseif ($nilai < 70 && $nilai >= 60) {
-            return 'CC';
-        } elseif ($nilai < 60 && $nilai >= 50) {
-            return 'C';
-        } elseif ($nilai < 50 && $nilai >= 30) {
-            return 'D';
-        } elseif ($nilai < 30 && $nilai >= 0) {
-            return 'E';
-        }
     }
 
     public function batalkanVerifikasi(Request $request, $id)
@@ -479,137 +307,5 @@ class VerifikasiController extends Controller
         return redirect()
             ->route('verifikasi.show', array('tahun_id' => $data->quesioner->tahun_id, 'user_id' => $data->user_id, '#' . $element))
             ->withSuccess('Verifikasi kuesioner berhasil dibatalkan.');
-    }
-
-    public function cetakReport(Request $request)
-    {
-        $tahun_id = $request->tahun_id;
-        $user_id  = $request->user_id;
-
-        $data_user = User::find($user_id);
-        $waktu = Time::find($tahun_id);
-
-        $indikator = Quesioner::groupBy('indikator_t')->orderBy('id', 'ASC')->get();
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'tahun_id',
-            'user_id',
-            'data_user',
-            'waktu',
-            'indikator'
-        ))->setPaper('a4', 'landscape');
-
-        return $pdf->stream("LKE " . $data_user->pegawai->nama_instansi  . " " . $waktu->tahun . ".pdf");
-    }
-
-    public function cetakRekapLke(Request $request)
-    {
-        $tahun_id = $request->tahun_id;
-        $user_id  = $request->user_id;
-        $n_indikator = $request->n_indikator;
-        $nilai = $request->nilai;
-
-        foreach ($n_indikator as $key => $i) {
-            $data = Indikator2023::firstOrCreate([
-                'tahun_id' => $tahun_id,
-                'user_id' => $user_id,
-                'n_indikator' => $n_indikator[$key]
-            ]);
-
-            $data->update([
-                'nilai' => $nilai[$key]
-            ]);
-        }
-
-        $data_user = User::find($user_id);
-        $waktu = Time::find($tahun_id);
-
-        $indikator = Quesioner::groupBy('indikator_t')->orderBy('id', 'ASC')->get();
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'rekap', compact(
-            'tahun_id',
-            'user_id',
-            'data_user',
-            'waktu',
-            'indikator'
-        ))->setPaper('a4', 'landscape');
-
-        return $pdf->stream("Rekap LKE " . $data_user->pegawai->nama_instansi  . " " . $waktu->tahun . ".pdf");
-    }
-
-    public function cetakRekapLkeUser(Request $request)
-    {
-        $tahun_id = $request->tahun_id;
-        $user_id  = $request->user_id;
-        $n_indikator = $request->n_indikator;
-        $nilai = $request->nilai;
-
-        $data_user = User::find($user_id);
-        $waktu = Time::find($tahun_id);
-
-        $indikator = Quesioner::groupBy('indikator_t')->orderBy('id', 'ASC')->get();
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'rekap', compact(
-            'tahun_id',
-            'user_id',
-            'data_user',
-            'waktu',
-            'indikator'
-        ))->setPaper('a4', 'landscape');
-
-        return $pdf->stream("Rekap LKE " . $data_user->pegawai->nama_instansi  . " " . $waktu->tahun . ".pdf");
-    }
-
-    public function inputDataTahunSebelum(Request $request)
-    {
-        $title = 'Perangkat Daerah';
-        $route = $this->route;
-
-        $tahun_id = $request->tahun_id;
-        $user_id  = $request->user_id;
-
-        $user = User::find($user_id);
-
-        $indikator = Quesioner::groupBy('indikator_t')->orderBy('id', 'ASC')->get();
-
-        return view('pages.verifikasi.input-data', compact(
-            'title',
-            'route',
-            'indikator',
-            'tahun_id',
-            'user_id',
-            'user'
-        ));
-    }
-
-    public function uploadLhe(Request $request)
-    {
-        $user_id = $request->user_id;
-        $tahun_id = $request->tahun_id;
-        $file = $request->file;
-
-        // upload file
-        $ext = $file->extension();
-        $fileName = time() . $user_id . "." . $ext;
-        $file->storeAs($this->path, $fileName, 'sftp', 'public');
-
-        $data = FileLhe::firstOrCreate([
-            'user_id' => $user_id,
-            'tahun_id' => $tahun_id,
-            'status' => 0,
-        ]);
-        $data->update([
-            'file' => $fileName
-        ]);
-
-        return redirect()
-            ->route('verifikasi.show', array('tahun_id' => $tahun_id, 'user_id' => $user_id))
-            ->withSuccess('File LHE berhasil diupload.');
     }
 }
