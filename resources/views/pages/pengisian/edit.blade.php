@@ -34,14 +34,10 @@
                         @include('layouts.alert')
                         <form class="needs-validation" action="{{ route('hasil.update', $data->id) }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            <input type="hidden" name="total_kuesioner" value="{{ $data->quesioner->count() }}">
                             <div class="card">
                                 <h6 class="card-header font-weight-bold text-black">Edit Kuesioner</h6>
                                 <div class="card-body">
-                                    <p class="font-weight-bold text-black ml-3">- {{ $data->quesioner->indikator->n_indikator }}</p>
-                                    <div class="ml-2 mb-2" style="margin-top: -15px !important">
-                                        <span>{{ $data->quesioner->indikator->deskripsi }}</span>
-                                    </div>
+                                    <p class="font-weight-bold text-black ml-3 mb-0">- {{ $data->quesioner->indikator->n_indikator }}</p>
                                     <div class="ml-5">
                                         <span class="text-black font-weight-normal mt-2">{{ $data->quesioner->question->n_question }}</span>
                                         @foreach ($answers as $index2 => $a)
@@ -50,7 +46,7 @@
                                             <label for="answer_id{{ $index2 }}" class="form-check-label text-black font-weight-normal fs-14">{{ $a->answer->jawaban }} </label>
                                         </div>
                                         @endforeach
-                                        @if ($data->message)
+                                        @if ($data->keterangan_revisi)
                                         <div class="mt-2">
                                             <span class="font-weight-normal text-black"><strong class="text-black">Pesan Revisi :</strong> {{ $data->message }} </span>
                                         </div>

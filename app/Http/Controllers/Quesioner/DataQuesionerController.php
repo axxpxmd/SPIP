@@ -262,13 +262,9 @@ class DataQuesionerController extends Controller
         // Get Params
         $answer_id  = $request->answer_id;
         $keterangan = $request->keterangan;
-        $total_kuesioner = $request->total_kuesioner;
-
-        $getNilai = Answer::select('nilai')->where('id', $answer_id)->first();
 
         $data->update([
             'answer_id' => $answer_id,
-            'nilai_awal' => round($getNilai->nilai / $total_kuesioner, 2),
             'keterangan' => $keterangan
         ]);
 
