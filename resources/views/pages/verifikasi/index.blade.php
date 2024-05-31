@@ -42,8 +42,6 @@
                                             <th width="5%"></th>
                                             <th width="50%">Nama Instansi</th>
                                             <th width="15%">Status Verifikasi</th>
-                                            <th width="5%">LKE</th>
-                                            <th width="5%">Rekap LKE</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -75,9 +73,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'nama', name: 'nama'},
-            {data: 'status_verifikasi', name: 'status_verifikasi'},
-            {data: 'lke', name: 'lke', orderable: false, searchable: false, className: 'text-center'},
-            {data: 'rekap_lke', name: 'rekap_lke', orderable: false, searchable: false, className: 'text-center'}
+            {data: 'status_verifikasi', name: 'status_verifikasi'}
         ],
     });
 

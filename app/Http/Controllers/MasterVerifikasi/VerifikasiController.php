@@ -58,24 +58,6 @@ class VerifikasiController extends Controller
         $results = TmResult::getDataResult($tahunId, $tempats);
 
         return DataTables::of($results)
-            ->addColumn('lke', function ($p) use ($tahunId) {
-                $data = "<a href='" . route('verifikasi.cetakReport', array('tahun_id' => $tahunId, 'user_id' => $p->user_id)) . "' target='_blank'><i class='icon icon-print'></i></a>";
-
-                if ($p->total_status == 82) {
-                    return $data;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('rekap_lke', function ($p) use ($tahunId) {
-                $data = "<a href='" . route('verifikasi.inputDataTahunSebelum', array('tahun_id' => $tahunId, 'user_id' => $p->user_id)) . "' target='_blank' class='text-success'><i class='icon icon-print'></i></a>";
-
-                if ($p->total_status == 82) {
-                    return $data;
-                } else {
-                    return '-';
-                }
-            })
             ->editColumn('nama', function ($p) use ($tahunId) {
                 $tahun = Time::where('id', $p->tahun_id)->first();
 
@@ -108,7 +90,7 @@ class VerifikasiController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['nama', 'status_verifikasi', 'skor_awal', 'skor_akhir', 'lke', 'rekap_lke'])
+            ->rawColumns(['nama', 'status_verifikasi'])
             ->toJson();
     }
 
