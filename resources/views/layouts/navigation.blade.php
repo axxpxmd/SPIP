@@ -113,7 +113,7 @@
         </a>
     </li>
     <li class="no-b">
-        <a href="{{ route('verifikasi.puskesmas') }}">
+        <a href="{{ route('verifikasi.index') }}">
             <i class="icon icon-verified_user text-blue s-18"></i>
             <span>Verifikasi</span>
         </a>

@@ -26,7 +26,6 @@ class StatuPengisianController extends Controller
     {
         $route = $this->route;
 
-        $zona_id = $request->zona_id;
         $title = $this->title;
 
         $time = Carbon\Carbon::now();
@@ -38,15 +37,13 @@ class StatuPengisianController extends Controller
             'title',
             'route',
             'tahuns',
-            'year',
-            'zona_id'
+            'year'
         ));
     }
 
     public function api(Request $request)
     {
         $tahunId = $request->tahun_id;
-        $zona_id = $request->zona_id;
 
         $user_id = Auth::user()->id;
 
@@ -60,7 +57,6 @@ class StatuPengisianController extends Controller
             ->when($tempats, function ($q) use ($tempats) {
                 return $q->whereIn('tm_pegawais.tempat_id', $tempats);
             })
-            ->where('tm_indikators.zona_id', $zona_id)
             ->where('tm_quesioners.tahun_id', $tahunId)
             ->groupBy('tm_results.user_id')
             ->get();
@@ -74,7 +70,7 @@ class StatuPengisianController extends Controller
                 return $p->user->pegawai->nama_instansi . " ( " . $tahun->tahun . " ) ";
             })
 
-            ->addColumn('status_pengisian', function ($p) use ($tahunId, $zona_id) {
+            ->addColumn('status_pengisian', function ($p) use ($tahunId) {
                 $user_id = $p->user_id;
 
                 $resultsCount = TmResult::select('tm_results.id', 'tm_quesioners.tahun_id')
@@ -84,7 +80,7 @@ class StatuPengisianController extends Controller
                     ->get()
                     ->count();
 
-                $countQuesioners = Quesioner::getTotal($tahunId, $zona_id);
+                $countQuesioners = Quesioner::getTotal($tahunId);
                 $getPercent = round($resultsCount / $countQuesioners * 100);
 
                 if ($countQuesioners == $resultsCount) {

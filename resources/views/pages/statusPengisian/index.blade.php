@@ -7,13 +7,7 @@
             <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4 class="ml-1">
-                        @if ($zona_id == 1)
-                            <i class="icon icon-building2 mr-1"></i>
-                        @elseif($zona_id == 2)
-                            <i class="icon icon-school mr-1"></i>
-                        @elseif($zona_id == 3)
-                            <i class="icon icon-local_hospital mr-1"></i>
-                        @endif
+                        <i class="icon icon-building2 mr-1"></i>
                         {{ $title }}
                     </h4>
                 </div>
@@ -35,8 +29,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div> 
-                        <input type="hidden" name="zona_id" id="zona_id" value="{{ $zona_id }}">
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -76,7 +69,6 @@
             method: 'POST',
             data: function (data) {
                 data.tahun_id = $('#tahun_id').val();
-                data.zona_id = $('#zona_id').val();
             }
         },
         columns: [

@@ -30,7 +30,7 @@ class VerifikasiController extends Controller
     protected $path = 'images/file/';
     protected $view = 'pages.verifikasi.';
 
-    public function puskesmas()
+    public function index()
     {
         $title = 'Perangkat Daerah';
         $route = $this->route;
@@ -40,7 +40,7 @@ class VerifikasiController extends Controller
 
         $tahuns = Time::select('id', 'tahun')->get();
 
-        return view('pages.verifikasi.puskesmas', compact(
+        return view('pages.verifikasi.index', compact(
             'title',
             'route',
             'tahuns',
@@ -48,15 +48,14 @@ class VerifikasiController extends Controller
         ));
     }
 
-    public function apiPuskesmas(Request $request)
+    public function api(Request $request)
     {
-        $zonaId = 3;
         $tahunId = $request->tahun_id;
         $user_id = Auth::user()->id;
 
         $tempats = VerifikatorTempat::select('tempat_id')->where('user_id', $user_id)->get()->toArray();
 
-        $results = TmResult::getDataResult($zonaId, $tahunId, $tempats);
+        $results = TmResult::getDataResult($tahunId, $tempats);
 
         return DataTables::of($results)
             ->addColumn('lke', function ($p) use ($tahunId) {
@@ -77,12 +76,12 @@ class VerifikasiController extends Controller
                     return '-';
                 }
             })
-            ->editColumn('puskesmas', function ($p) use ($tahunId) {
+            ->editColumn('nama', function ($p) use ($tahunId) {
                 $tahun = Time::where('id', $p->tahun_id)->first();
 
                 return "<a href='show?tahun_id=" . $tahunId . "&user_id=" . $p->id . "' class='text-primary' title='Show Data'>" . $p->nama_instansi . " (" . $tahun->tahun . ")</a>";
             })
-            ->addColumn('status_verifikasi', function ($p) use ($zonaId, $tahunId) {
+            ->addColumn('status_verifikasi', function ($p) use ($tahunId) {
                 $tahun = Time::where('id', $p->tahun_id)->first();
 
                 $dataCount = TmResult::select('tm_pegawais.nama_instansi', 'tm_results.user_id as id', 'tm_quesioners.tahun_id', 'tm_results.user_id')
@@ -91,9 +90,7 @@ class VerifikasiController extends Controller
                     ->join('tm_places', 'tm_places.id', '=', 'tm_pegawais.tempat_id')
                     ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                     ->where('tm_results.user_id', $p->user_id)
-                    ->where('tm_places.zona_id', $zonaId)
                     ->where('tm_quesioners.tahun_id', $tahunId)
-                    // ->where('tm_results.status_kirim', 1)
                     ->get()
                     ->count();
 
@@ -111,7 +108,7 @@ class VerifikasiController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['puskesmas', 'status_verifikasi', 'skor_awal', 'skor_akhir', 'lke', 'rekap_lke'])
+            ->rawColumns(['nama', 'status_verifikasi', 'skor_awal', 'skor_akhir', 'lke', 'rekap_lke'])
             ->toJson();
     }
 

@@ -7,7 +7,7 @@
             <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4 class="ml-1">
-                        <i class="icon icon-building2 mr-1"></i>
+                        <i class="icon icon-building mr-1"></i>
                         {{ $title }}
                     </h4>
                 </div>
@@ -29,7 +29,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -40,11 +40,10 @@
                                     <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th width="5%"></th>
-                                            <th width="55%">Nama Instansi</th>
-                                            <th width="10%">Skor Awal</th>
-                                            <th width="10%">Skor Akhir</th>
+                                            <th width="50%">Nama Instansi</th>
                                             <th width="15%">Status Verifikasi</th>
-                                            <th width="5%"></th>
+                                            <th width="5%">LKE</th>
+                                            <th width="5%">Rekap LKE</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -67,7 +66,7 @@
         pageLength: 25,
         order: [ 0, 'asc' ],
         ajax: {
-            url: "{{ route($route.'apiKelurahan') }}",
+            url: "{{ route($route.'api') }}",
             method: 'POST',
             data: function (data) {
                 data.tahun_id = $('#tahun_id').val();
@@ -75,11 +74,10 @@
         },
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
-            {data: 'kelurahan', name: 'kelurahan'},
-            {data: 'skor_awal', name: 'skor_awal'},
-            {data: 'skor_akhir', name: 'skor_akhir'},
+            {data: 'nama', name: 'nama'},
             {data: 'status_verifikasi', name: 'status_verifikasi'},
-            {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
+            {data: 'lke', name: 'lke', orderable: false, searchable: false, className: 'text-center'},
+            {data: 'rekap_lke', name: 'rekap_lke', orderable: false, searchable: false, className: 'text-center'}
         ],
     });
 

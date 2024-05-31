@@ -122,4 +122,23 @@ class TmResult extends Model
 
         return $data;
     }
+
+    public static function getDataResult($tahunId, $tempats)
+    {
+        $data = TmResult::select(DB::raw("SUM(tm_results.status) as total_status"), 'tm_pegawais.nama_instansi', 'tm_results.user_id as id', 'tm_quesioners.tahun_id', 'tm_results.user_id')
+            ->join('tm_users', 'tm_users.id', '=', 'tm_results.user_id')
+            ->join('tm_pegawais', 'tm_pegawais.user_id', '=', 'tm_users.id')
+            ->join('tm_places', 'tm_places.id', '=', 'tm_pegawais.tempat_id')
+            ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('tm_quesioners.tahun_id', $tahunId)
+            ->where('tm_results.status_kirim', 1)
+            ->when($tempats, function ($q) use ($tempats) {
+                return $q->whereIn('tm_pegawais.tempat_id', $tempats);
+            })
+            ->orderBy('total_status', 'DESC')
+            ->groupBy('tm_results.user_id')
+            ->get();
+
+        return $data;
+    }
 }

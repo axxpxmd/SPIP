@@ -110,12 +110,8 @@ Route::group(['middleware' => ['auth']], function () {
     // Verifikasi
     Route::prefix('verifikasi')->name('verifikasi.')->namespace('MasterVerifikasi')->group(function () {
         //
-        Route::get('sekolah', 'VerifikasiController@sekolah')->name('sekolah');
-        Route::post('sekolah/api-sekolah', 'VerifikasiController@apiSekolah')->name('apiSekolah');
-        Route::get('kelurahan', 'VerifikasiController@kelurahan')->name('kelurahan');
-        Route::post('kelurahan/api-kelurahan', 'VerifikasiController@apiKelurahan')->name('apiKelurahan');
-        Route::get('perangkat-daerah', 'VerifikasiController@puskesmas')->name('puskesmas');
-        Route::post('perangkat-daerah/api-perangkat-daerah', 'VerifikasiController@apiPuskesmas')->name('apiPuskesmas');
+        Route::get('perangkat-daerah', 'VerifikasiController@index')->name('index');
+        Route::post('perangkat-daerah/api-perangkat-daerah', 'VerifikasiController@api')->name('api');
 
         Route::get('show', 'VerifikasiController@show')->name('show');
         Route::get('edit/{id}', 'VerifikasiController@edit')->name('edit');
