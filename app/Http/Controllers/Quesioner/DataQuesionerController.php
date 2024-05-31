@@ -323,10 +323,9 @@ class DataQuesionerController extends Controller
             ->where('tm_results.status_kirim', 0)
             ->update([
                 'status_kirim' => 1,
-                'message' => null,
+                'keterangan_revisi' => null,
                 'answer_id_revisi' => null,
-                'status_revisi' => null,
-                'nilai_akhir' => null
+                'status_revisi' => null
             ]);
 
         return redirect()
