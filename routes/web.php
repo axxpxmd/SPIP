@@ -123,11 +123,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('kirim-revisi', 'VerifikasiController@kirimRevisi')->name('kirimRevisi');
 
         Route::get('batalkan-verifikasi/{id}', 'VerifikasiController@batalkanVerifikasi')->name('batalkanVerifikasi');
-        Route::get('cetak-report', 'VerifikasiController@cetakReport')->name('cetakReport');
-        Route::post('cetak-report-lke', 'VerifikasiController@cetakRekapLke')->name('cetakRekapLke');
-        Route::get('cetak-report-lke', 'VerifikasiController@cetakRekapLkeUser')->name('cetakRekapLkeUser');
-        Route::get('input-data-tahun-sebelum', 'VerifikasiController@inputDataTahunSebelum')->name('inputDataTahunSebelum');
-        Route::post('upload-file-lhe', 'VerifikasiController@uploadLhe')->name('uploadLhe');
     });
 
     // Status Pengisian
