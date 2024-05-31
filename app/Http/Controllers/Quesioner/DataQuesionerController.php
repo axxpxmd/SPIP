@@ -8,6 +8,8 @@ use DateTime;
 use DataTables;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Http\Controllers\Controller;
 
 // Models
@@ -21,7 +23,6 @@ use App\Models\Indikator;
 use App\Models\Indikator2023;
 use App\Models\TrResultFile;
 use App\Models\TrQuesionerAnswer;
-use Illuminate\Support\Facades\DB;
 
 class DataQuesionerController extends Controller
 {
@@ -43,7 +44,6 @@ class DataQuesionerController extends Controller
     public function api(Request $request)
     {
         $user_id = Auth::user()->id;
-        $zona_id = Auth::user()->pegawai->tempat->zona_id;
 
         $results = TmResult::select(DB::raw("SUM(tm_results.status) as total_status"), 'tm_results.id', 'tm_quesioners.tahun_id', 'user_id')
             ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
@@ -52,26 +52,6 @@ class DataQuesionerController extends Controller
             ->get();
 
         return DataTables::of($results)
-            ->addColumn('lke', function ($p) {
-                $data = "<a href='" . route('verifikasi.cetakReport', array('tahun_id' => $p->tahun_id, 'user_id' => $p->user_id)) . "' target='_blank'><i class='icon icon-print'></i></a>";
-
-                if ($p->total_status == 82) {
-                    return $data;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('rekap_lke', function ($p) {
-                $data = "<a href='" . route('verifikasi.cetakRekapLkeUser', array('tahun_id' => $p->tahun_id, 'user_id' => $p->user_id)) . "' target='_blank' class='text-success'><i class='icon icon-print'></i></a>";
-                $check = Indikator2023::where('tahun_id', $p->tahun_id)->where('user_id', $p->user_id)->count();
-
-                if ($p->total_status == 82 && $check != 0) {
-                    return $data;
-                } else {
-                    return '-';
-                }
-            })
-
             ->editColumn('tahun', function ($p) {
                 $tahun = Time::where('id', $p->tahun_id)->first();
                 return "<a href='" . route($this->route . 'show', $p->tahun_id) . "' class='text-primary' title='Show Data'>" . $tahun->tahun . "</a>";
@@ -97,7 +77,7 @@ class DataQuesionerController extends Controller
                     return 'Belum diverifikasi';
                 }
             })
-            ->addColumn('status_pengisian', function ($p) use ($zona_id, $user_id) {
+            ->addColumn('status_pengisian', function ($p) use ($user_id) {
                 $tahun = Time::where('id', $p->tahun_id)->first();
 
                 $resultsCount = TmResult::select('tm_results.id', 'tm_quesioners.tahun_id')
@@ -107,7 +87,7 @@ class DataQuesionerController extends Controller
                     ->get()
                     ->count();
 
-                $countQuesioners = Quesioner::getTotal($tahun->id, $zona_id);
+                $countQuesioners = Quesioner::getTotal($tahun->id);
                 $getPercent = round($resultsCount / $countQuesioners * 100);
 
                 if ($countQuesioners == $p->count()) {
@@ -121,7 +101,6 @@ class DataQuesionerController extends Controller
                     ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                     ->where('tm_quesioners.tahun_id', $p->tahun_id)
                     ->where('tm_results.user_id', $user_id)
-                    ->whereNotNull('tm_results.message')
                     ->where('status_kirim', 0)
                     ->count();
 
@@ -144,7 +123,7 @@ class DataQuesionerController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['tahun', 'status_verifikasi', 'status_pengisian', 'status_pengiriman', 'lke', 'rekap_lke'])
+            ->rawColumns(['tahun', 'status_verifikasi', 'status_pengisian', 'status_pengiriman'])
             ->toJson();
     }
 
@@ -169,7 +148,7 @@ class DataQuesionerController extends Controller
         $time = Time::find($id);
         $tahunId = $time->id;
 
-        $datas = TmResult::select('tm_results.id as id', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'nilai_akhir', 'status', 'tm_results.answer_id as answer_id', 'message', 'status_kirim', 'answer_id_revisi')
+        $datas = TmResult::select('tm_results.id as id', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'tm_results.answer_id as answer_id', 'keterangan_revisi', 'status_kirim', 'answer_id_revisi')
             ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
             ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
             ->where('tm_results.user_id', $userId)
@@ -180,9 +159,6 @@ class DataQuesionerController extends Controller
         $indikators = Indikator::whereIn('id', $indikatorArray)->get();
 
         $questionArray = TmResult::questionArray($userId, $tahunId);
-
-        $getNilai = TmResult::getNilai($userId, $tahunId);
-        $getNilaiVerif = TmResult::getNilaiVerif($userId, $tahunId);
 
         // ETC
         $countQuesioners = Quesioner::getTotal($tahunId, $zonaId);
@@ -199,32 +175,12 @@ class DataQuesionerController extends Controller
             ->where('status_kirim', 0)
             ->count();
 
-        $now = Carbon\Carbon::now();
-
-        // Check End Time
-        $datetime1End = new DateTime($now->toDateTimeString());
-        $datetime2End = new DateTime($time->end);
-        $intervalEnd = $datetime1End->diff($datetime2End);
-        $yearsDiffEnd = $intervalEnd->format('%r%y');
-        $monthDiffEnd = $intervalEnd->format('%r%m');
-        $daysDiffEnd = $intervalEnd->format('%r%d');
-        $hoursDiffEnd = $intervalEnd->format('%r%h');
-        $minutesDiffEnd = $intervalEnd->format('%r%i');
-
-        $nilai_awal = TmResult::select(DB::raw("sum(nilai_awal) as nilai"))->where('user_id', $userId)->first();
-
-        $file_lhe = FileLhe::where('user_id', $userId)->where('tahun_id', $tahunId)->where('status', 0)->first();
-        $file_lhe_tindak_lanjut = FileLhe::where('user_id', $userId)->where('tahun_id', $tahunId)->where('status', 1)->first();
-
         return view('pages.pengisian.show', compact(
-            'file_lhe',
             'route',
-            'nilai_awal',
             'title',
             'time',
             'indikators',
             'questionArray',
-            'getNilai',
             'userId',
             'nTempat',
             'nKepala',
@@ -241,15 +197,8 @@ class DataQuesionerController extends Controller
             'countResultVerif',
             'getPercentVerif',
             'tahunId',
-            'getNilaiVerif',
             'status_kirim',
-            'yearsDiffEnd',
-            'daysDiffEnd',
-            'hoursDiffEnd',
-            'minutesDiffEnd',
-            'monthDiffEnd',
-            'datas',
-            'file_lhe_tindak_lanjut'
+            'datas'
         ));
     }
 

@@ -40,7 +40,7 @@
                 @csrf
                 <div class="text-center" style="margin-top: -40px !important;">
                     <p class="fw-bold fs-25 text-black">SPIP</p>
-                    <p class="text-black mt-2">Nama Menyusul</p>
+                    <p class="text-black fs-14 mt-1">Sistem Pengendalian Intern Pemerintah</p>
                 </div>
                 <div class="mt-4">
                     <div class="form-holder">

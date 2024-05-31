@@ -30,8 +30,6 @@
                                             <th width="15%">Status Pengiriman</th>
                                             <th width="15%">Revisi</th>
                                             <th width="15%">Status Verifikasi</th>
-                                            <th width="5%">LKE</th>
-                                            <th width="5%">Rekap LKE</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -63,9 +61,7 @@
             {data: 'status_pengisian', name: 'status_pengisian'},
             {data: 'status_pengiriman', name: 'status_pengiriman'},
             {data: 'revisi', name: 'revisi'},
-            {data: 'status_verifikasi', name: 'status_verifikasi'},
-            {data: 'lke', name: 'lke', orderable: false, searchable: false, className: 'text-center'},
-            {data: 'rekap_lke', name: 'rekap_lke', orderable: false, searchable: false, className: 'text-center'},
+            {data: 'status_verifikasi', name: 'status_verifikasi'}
         ],
     });
 </script>
