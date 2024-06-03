@@ -41,11 +41,10 @@ class RevisiController extends Controller
     public function api(Request $request)
     {
         $user_id = Auth::user()->id;
-        $zona_id = Auth::user()->pegawai->tempat->zona_id;
 
         $results = TmResult::select('tm_results.id', 'tm_quesioners.tahun_id')
             ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->whereNotNull('message')
+            ->whereNotNull('keterangan_revisi')
             ->where('status_kirim', 0)
             ->groupBy('tm_quesioners.tahun_id')
             ->where('tm_results.user_id', $user_id)
@@ -77,7 +76,7 @@ class RevisiController extends Controller
                     return 'Belum diverifikasi';
                 }
             })
-            ->addColumn('status_pengisian', function ($p) use ($zona_id, $user_id) {
+            ->addColumn('status_pengisian', function ($p) use ($user_id) {
                 $tahun = Time::where('id', $p->tahun_id)->first();
 
                 $resultsCount = TmResult::select('tm_results.id', 'tm_quesioners.tahun_id')
@@ -87,7 +86,7 @@ class RevisiController extends Controller
                     ->get()
                     ->count();
 
-                $countQuesioners = Quesioner::getTotal($tahun->id, $zona_id);
+                $countQuesioners = Quesioner::getTotal($tahun->id);
                 $getPercent = round($resultsCount / $countQuesioners * 100);
 
                 if ($countQuesioners == $p->count()) {
@@ -107,7 +106,6 @@ class RevisiController extends Controller
                     ->get()
                     ->count();
                 if ($resultsCount == 0) {
-                    // return 'Sudah Terkirim' . "<i class='icon-verified_user text-primary ml-2'></i>";
                     return "<span class='text-success font-weight-normal fs-13'>Sudah Dikirim<i class='icon-verified_user ml-2'></i></span>";
                 } else {
                     return "<span class='text-danger font-weight-normal fs-13'>Belum Dikirim<i class='icon-info-circle text-danger ml-2'></i></span>";
@@ -139,7 +137,7 @@ class RevisiController extends Controller
         $time = Time::find($id);
         $tahunId = $time->id;
 
-        $datas = TmResult::select('tm_results.id as id', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'nilai_akhir', 'status', 'tm_results.answer_id as answer_id', 'message', 'status_kirim', 'answer_id_revisi')
+        $datas = TmResult::select('tm_results.id as id', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'tm_results.answer_id as answer_id', 'keterangan_revisi', 'status_kirim', 'answer_id_revisi')
             ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
             ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
             ->where('tm_results.user_id', $userId)
@@ -151,16 +149,15 @@ class RevisiController extends Controller
 
         $questionArray = TmResult::questionArray($userId, $tahunId);
 
-        $getNilai = TmResult::getNilai($userId, $tahunId);
-        $getNilaiVerif = TmResult::getNilaiVerif($userId, $tahunId);
-
         // ETC
         $countQuesioners = Quesioner::getTotal($tahunId, $zonaId);
         $countResult = TmResult::getTotal($tahunId, $userId);
-        $getPercent = round($countResult / $countQuesioners * 100);
+        $totalRevisi = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('user_id', $userId)
+            ->where('tm_quesioners.tahun_id', $tahunId)
+            ->where('status_revisi', 1)->count();
 
         $countResultVerif = TmResult::getTotalVerif($tahunId, $userId);
-        $getPercentVerif = round($countResultVerif / $countQuesioners * 100);
 
         // Check Verification
         $status_kirim = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
@@ -169,28 +166,13 @@ class RevisiController extends Controller
             ->where('status_kirim', 0)
             ->count();
 
-        $now = Carbon\Carbon::now();
-
-        // Check End Time
-        $datetime1End = new DateTime($now->toDateTimeString());
-        $datetime2End = new DateTime($time->end);
-        $intervalEnd = $datetime1End->diff($datetime2End);
-        $yearsDiffEnd = $intervalEnd->format('%r%y');
-        $monthDiffEnd = $intervalEnd->format('%r%m');
-        $daysDiffEnd = $intervalEnd->format('%r%d');
-        $hoursDiffEnd = $intervalEnd->format('%r%h');
-        $minutesDiffEnd = $intervalEnd->format('%r%i');
-
-        $nilai_awal = TmResult::select(DB::raw("sum(nilai_awal) as nilai"))->where('user_id', $userId)->first();
-
         return view('pages.revisi.show', compact(
+            'totalRevisi',
             'route',
-            'nilai_awal',
             'title',
             'time',
             'indikators',
             'questionArray',
-            'getNilai',
             'userId',
             'nTempat',
             'nKepala',
@@ -203,17 +185,9 @@ class RevisiController extends Controller
             'email',
             'countQuesioners',
             'countResult',
-            'getPercent',
             'countResultVerif',
-            'getPercentVerif',
             'tahunId',
-            'getNilaiVerif',
             'status_kirim',
-            'yearsDiffEnd',
-            'daysDiffEnd',
-            'hoursDiffEnd',
-            'minutesDiffEnd',
-            'monthDiffEnd',
             'datas'
         ));
     }
@@ -246,7 +220,7 @@ class RevisiController extends Controller
                 ->withSuccess('kuesioner telah sudah dikirim, tidak bisa diedit.');
         }
 
-        return view('pages.pengisian.edit', compact(
+        return view('pages.revisi.edit', compact(
             'userId',
             'nTempat',
             'nKepala',
@@ -278,13 +252,9 @@ class RevisiController extends Controller
         // Get Params
         $answer_id  = $request->answer_id;
         $keterangan = $request->keterangan;
-        $total_kuesioner = $request->total_kuesioner;
-
-        $getNilai = Answer::select('nilai')->where('id', $answer_id)->first();
 
         $data->update([
             'answer_id' => $answer_id,
-            'nilai_awal' => round($getNilai->nilai / $total_kuesioner, 2),
             'keterangan' => $keterangan
         ]);
 
@@ -335,10 +305,9 @@ class RevisiController extends Controller
             ->where('tm_results.status_kirim', 0)
             ->update([
                 'status_kirim' => 1,
-                'message' => null,
+                'keterangan_revisi' => null,
                 'answer_id_revisi' => null,
-                'status_revisi' => null,
-                'nilai_akhir' => null
+                'status_revisi' => null
             ]);
 
         return redirect()

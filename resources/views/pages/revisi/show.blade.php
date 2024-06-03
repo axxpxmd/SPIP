@@ -15,7 +15,7 @@
             <div class="row justify-content-between">
                 <ul role="tablist" class="nav nav-material nav-material-white responsive-tab">
                     <li>
-                        <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
+                        <a class="nav-link" href="{{ route('revisi.show', $time->id) }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                 </ul>
             </div>
@@ -70,19 +70,11 @@
                             <div class="card-body">
                                 <div class="col-md-12 text-black">
                                     <div class="row">
-                                        <label class="col-sm-2 fs-13"><strong>Status Pengisian </strong></label>
-                                        @if ($countResult == $countQuesioners)
-                                        <label class="col-sm-10 fs-13">: {{ $countResult }} dari {{ $countQuesioners }} Pertanyaan | {{ $getPercent }}% </label>
-                                        @else
-                                        <label class="col-sm-10 fs-13">: {{ $countResult }} dari {{ $countQuesioners }} Pertanyaan | {{ $getPercent }}% | <a href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId)) }}">Lanjutkan Mengerjakan<i class="icon-arrow_forward"></i></a></label>
-                                        @endif
+                                        <label class="col-sm-2 fs-13"><strong>Total Kuesioner Direvisi </strong></label>
+                                        <label class="col-sm-10 fs-13">: {{ $totalRevisi }} Pertanyaan</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-sm-2 fs-13"><strong>Status Verifikasi </strong></label>
-                                        <label class="col-sm-10 fs-13">: {{ $countResultVerif }} dari {{ $countQuesioners }} Pertanyaan | {{ $getPercentVerif }}%</label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-sm-2 fs-13"><strong>Status Quesioner</strong></label>
+                                        <label class="col-sm-2 fs-13"><strong>Status Kuesioner</strong></label>
                                         <label class="col-sm-10 fs-13">:
                                             @if ($status_kirim != 0)
                                                 Belum Terkirim
@@ -111,13 +103,12 @@
                                     </div>
                                     <ol>
                                         @php
-                                             $datas = App\TmResult::select('tm_results.id as id','status_kirim','status_revisi', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'nilai_akhir','nilai_awal', 'status', 'tm_results.answer_id as answer_id', 'message', 'keterangan', 'status_kirim', 'answer_id_revisi')
+                                             $datas = App\TmResult::select('tm_results.id as id','status_kirim','status_revisi', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'tm_results.answer_id as answer_id', 'keterangan_revisi', 'keterangan', 'status_kirim', 'answer_id_revisi')
                                                         ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                                                         ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
                                                         ->where('tm_quesioners.indikator_id', $i->id)
                                                         ->where('tm_results.user_id', $userId)
                                                         ->where('tm_quesioners.tahun_id', $tahunId)
-                                                        ->whereNotNull('tm_results.message')
                                                         ->where('status_kirim', 0)
                                                         ->get();
                                         @endphp
@@ -129,14 +120,8 @@
                                                 $files = App\Models\TrResultFile::where('result_id', $q->id)->get();
                                             @endphp
                                             <li type="disc" class="text-black font-weight-normal mt-2">{{ $q->n_question }}
-                                                @if ($q->status == 1)
-                                                    <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i> <span class="font-weight-bold">({{ $q->nilai_akhir }})</span>
-                                                @endif
-                                                @if ($q->message && $q->status_revisi != 1)
+                                                @if ($q->status_revisi == 1)
                                                 <span class="text-danger font-weight-bold">( Direvisi )</span>
-                                                @endif
-                                                @if ($q->status_revisi)
-                                                <span class="text-danger font-weight-bold">( Telah Diubah )</span>
                                                 @endif
                                             </li>
                                             <!-- Answer -->
@@ -147,13 +132,8 @@
                                                 <label class="form-check-label fs-14 {{ $a->answer->id == $q->answer_id_revisi ? "text-danger" : "-" }} {{ $a->answer->id == $q->answer_id ? "text-primary" : "-" }} font-weight-normal">{{ $a->answer->jawaban }}</label>
                                             </div>
                                             @endforeach
-                                            @if ($q->message && $q->status_revisi != 1)
                                             <div class="mt-1">
-                                                <span class="text-black">Pesan Revisi : <span class="text-danger font-weight-bold">{{ $q->message }}</span></span>
-                                            </div>
-                                            @endif
-                                            <div class="mt-1">
-                                                <span class=" text-black"><strong class="text-black">Keterangan :</strong> {{ $q->keterangan }} </span>
+                                                <span class="text-black"><strong class="text-black">Keterangan :</strong> {{ $q->keterangan }} </span>
                                             </div>
                                             <div class="mt-1">
                                                 <span class=""><strong class="text-black">File :</strong></span>
@@ -163,10 +143,13 @@
                                                     <span>tidak ada file</span>
                                                 @endforelse
                                             </div>
+                                            <div class="mt-1 mb-2">
+                                                <span class="text-danger"><strong class="text-black">Penjelasan Verifikator :</strong> {{ $q->keterangan_revisi ? $q->keterangan_revisi : '-' }}</span>
+                                            </div>
                                             <div class="mt-1 mb-4">
                                                 @if ($q->status == 1)
                                                 <div class="mt-1">
-                                                    <span class="text-danger"><strong class="text-black">Pesan :</strong> {{ $q->message }}</span>
+                                                    <span class="text-danger"><strong class="text-black">Pesan :</strong> {{ $q->keterangan_revisi }}</span>
                                                 </div>
                                                 <div class="mt-1">
                                                     <span class=""><strong class="text-black">Nilai Awal :</strong> {{ $q->nilai_awal }}</span>
