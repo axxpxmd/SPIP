@@ -303,6 +303,7 @@ class RevisiController extends Controller
             ->where('tm_results.user_id', $user_id)
             ->where('tm_quesioners.tahun_id', $tahun_id)
             ->where('tm_results.status_kirim', 0)
+            ->where('tm_results.status_revisi', 1)
             ->update([
                 'status_kirim' => 1,
                 'keterangan_revisi' => null,

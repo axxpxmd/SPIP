@@ -132,6 +132,10 @@ class VerifikasiController extends Controller
         $countQuesioners = Quesioner::getTotal($tahunId);
         $countResult = TmResult::getTotal($tahunId, $userId);
         $getPercent = round($countResult / $countQuesioners * 100);
+        $totalRevisi = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('user_id', $userId)
+            ->where('tm_quesioners.tahun_id', $tahunId)
+            ->where('status_revisi', 1)->count();
 
         $countResultVerif = TmResult::getTotalVerif($tahunId, $userId);
         $getPercentVerif = round($countResultVerif / $countQuesioners * 100);
@@ -140,6 +144,7 @@ class VerifikasiController extends Controller
         $title = 'Perangkat Daerah';
 
         return view('pages.verifikasi.show', compact(
+            'totalRevisi',
             'role_id',
             'id',
             'userId',
@@ -191,29 +196,6 @@ class VerifikasiController extends Controller
             ->withSuccess('Berhasil! Quesioner berhasil dikembalikan.');
     }
 
-    // disetujui
-    public function confirm($id, Request $request)
-    {
-        $result  = TmResult::where('id', $id)->first();
-        $element = $request->element;
-
-        if ($result->status_revisi != 1) {
-            $result->update([
-                'status' => 1,
-                'nilai_akhir' => $result->nilai_awal
-            ]);
-        } else {
-            $result->update([
-                'status' => 1,
-            ]);
-        }
-
-        return redirect()
-            ->route('verifikasi.show', array('tahun_id' => $result->quesioner->tahun_id, 'user_id' => $result->user_id, '#pertanyaanDiv' . $element))
-            ->withSuccess('Berhasil! Quesioner berhasil diverifikasi.');
-    }
-
-
     public function edit($id, Request $request)
     {
         $data = TmResult::find($id);
@@ -235,15 +217,6 @@ class VerifikasiController extends Controller
 
         $title = 'Perangkat Daerah';
 
-        $getNilai = TmResult::select('tm_quesioners.indikator_id')
-            ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->join('tm_answers', 'tm_answers.id', '=', 'tm_results.answer_id')
-            ->where('user_id', $userId)
-            ->where('tm_quesioners.tahun_id', $tahunId)
-            ->first();
-
-        $total_pertanyaan = Quesioner::where('indikator_id', $data->quesioner->indikator_id)->count();
-
         $answers = TrQuesionerAnswer::where('quesioner_id', $data->quesioner_id)->get();
         $files = TrResultFile::where('result_id', $data->id)->get();
 
@@ -263,18 +236,16 @@ class VerifikasiController extends Controller
             'nama_instansi',
             'tahun',
             'route',
-            'getNilai',
             'data',
             'answers',
             'files',
             'path',
             'tahunId',
-            'total_pertanyaan',
             'element'
         ));
     }
 
-    // di edit
+    // di update
     public function sendRevisi(Request $request, $id)
     {
         $data = TmResult::find($id);
@@ -296,15 +267,29 @@ class VerifikasiController extends Controller
             ->withSuccess('Data quesioner berhasil diubah.');
     }
 
+    // disetujui
+    public function confirm($id, Request $request)
+    {
+        $result  = TmResult::where('id', $id)->first();
+        $element = $request->element;
+
+        $result->update([
+            'status' => 1
+        ]);
+
+        return redirect()
+            ->route('verifikasi.show', array('tahun_id' => $result->quesioner->tahun_id, 'user_id' => $result->user_id, '#pertanyaanDiv' . $element))
+            ->withSuccess('Berhasil! Quesioner berhasil diverifikasi.');
+    }
+
     public function batalkanVerifikasi(Request $request, $id)
     {
         $element = $request->element;
         $data = TmResult::find($id);
         $data->update([
             'status' => 0,
-            'nilai_akhir' => null,
             'answer_id_revisi' => null,
-            'message' => null,
+            'keterangan_revisi' => null,
             'status_revisi' => null
         ]);
 

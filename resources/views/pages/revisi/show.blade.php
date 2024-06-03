@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="card mt-2">
-                            <h6 class="card-header font-weight-bold text-black">Hasil Pengisian Kuesioner</h6>
+                            <h6 class="card-header font-weight-bold text-black">Detail Revisi</h6>
                             <div class="card-body">
                                 <div class="col-md-12 text-black">
                                     <div class="row">

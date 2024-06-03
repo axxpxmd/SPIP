@@ -84,7 +84,11 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 fs-13"><strong>Status Verifikasi </strong></label>
-                                        <label class="col-sm-10 fs-13">: {{ $countResultVerif }} dari {{ $countQuesioners }} Pertanyaan | {{ $getPercentVerif }}%</label>
+                                        <label class="col-sm-10 fs-13">: {{ $countResultVerif }} dari {{ $countResult }} Pertanyaan | {{ $getPercentVerif }}%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-2 fs-13"><strong>Total Kuesioner Direvisi </strong></label>
+                                        <label class="col-sm-10 fs-13">: {{ $totalRevisi }} Pertanyaan</label>
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +133,9 @@
                                                     @if ($q->status_revisi == 1)
                                                         <span class="text-danger font-weight-bold">( Sedang Direvisi )</span>
                                                     @endif
+                                                    @if ($q->status == 1)
+                                                        <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i>
+                                                    @endif
                                                 </li>
                                             </div>
                                             @foreach ($answers as $index2 => $a)
@@ -161,7 +168,7 @@
                                                     $element = $index.$indexq;
                                                 @endphp
                                                 @if ($role_id != 8)
-                                                    @if ($q->status_revisi == 0)
+                                                    @if ($q->status_revisi == 0 && $q->status == 0)
                                                         <button class="btn btn-success btn-sm" data-toggle="modal" onclick="getRouteForm({{ $q->id }}, {{ $element }})" data-target="#verifikasi"><i class="icon-check mr-2"></i>Verifikasi</button>
                                                         <a class="btn btn-primary btn-sm" href="{{ route('verifikasi.edit', $q->id . '?element=pertanyaanDiv'.$index.$indexq) }}"><i class="icon-edit mr-2"></i>Edit Jawaban</a>
                                                         @if (!$q->answer_id_revisi)
