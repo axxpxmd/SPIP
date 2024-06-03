@@ -13,7 +13,7 @@ use App\Models\Quesioner;
 class TmResult extends Model
 {
     protected $table = 'tm_results';
-    protected $fillable = ['id', 'user_id', 'quesioner_id', 'answer_id', 'keterangan', 'status', 'nilai_akhir', 'nilai_awal', 'message', 'status_kirim', 'status_revisi', 'created_at', 'updated_at', 'answer_id_revisi'];
+    protected $fillable = ['id', 'user_id', 'quesioner_id', 'answer_id', 'keterangan', 'status', 'nilai_akhir', 'nilai_awal', 'keterangan_revisi', 'status_kirim', 'status_revisi', 'created_at', 'updated_at', 'answer_id_revisi'];
 
     public function quesioner()
     {

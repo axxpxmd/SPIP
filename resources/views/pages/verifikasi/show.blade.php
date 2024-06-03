@@ -126,8 +126,8 @@
                                             @endphp
                                             <div id="pertanyaanDiv{{ $index }}{{ $indexq }}">
                                                 <li type="disc" class="text-black font-weight-normal mt-2">{{ $q->n_question }}
-                                                    @if ($q->status_kirim == 0 && $q->keterangan_revisi != null)
-                                                    <span class="text-danger font-weight-bold">( Sedang Direvisi )</span>
+                                                    @if ($q->status_revisi == 1)
+                                                        <span class="text-danger font-weight-bold">( Sedang Direvisi )</span>
                                                     @endif
                                                 </li>
                                             </div>
@@ -154,18 +154,16 @@
                                                 @endforelse
                                             </div>
                                             <div class="mb-4">
-                                                <div class="mt-1">
-                                                    <span class="text-danger"><strong class="text-black">Penjelasan :</strong> {{ $q->keterangan_revisi }}</span>
+                                                <div class="mt-1 mb-2">
+                                                    <span class="text-danger"><strong class="text-black">Penjelasan Verifikator :</strong> {{ $q->keterangan_revisi ? $q->keterangan_revisi : '-' }}</span>
                                                 </div>
                                                 @php
                                                     $element = $index.$indexq;
                                                 @endphp
                                                 @if ($role_id != 8)
-                                                    @if ($q->status != 1 && $q->status_kirim == 1)
+                                                    @if ($q->status_revisi == 0)
                                                         <button class="btn btn-success btn-sm" data-toggle="modal" onclick="getRouteForm({{ $q->id }}, {{ $element }})" data-target="#verifikasi"><i class="icon-check mr-2"></i>Verifikasi</button>
-                                                        {{-- @if ($q->status_revisi != 1) --}}
-                                                            <a class="btn btn-primary btn-sm" href="{{ route('verifikasi.edit', $q->id . '?element=pertanyaanDiv'.$index.$indexq) }}"><i class="icon-edit mr-2"></i>Edit Nilai</a>
-                                                        {{-- @endif --}}
+                                                        <a class="btn btn-primary btn-sm" href="{{ route('verifikasi.edit', $q->id . '?element=pertanyaanDiv'.$index.$indexq) }}"><i class="icon-edit mr-2"></i>Edit Jawaban</a>
                                                         @if (!$q->answer_id_revisi)
                                                         <button class="btn btn-danger btn-sm" data-toggle="modal" onclick="getRevisiForm({{ $q->id }}, {{ $element }})" data-target="#revisi"><i class="icon-check mr-2"></i>Revisi</button>
                                                         @endif

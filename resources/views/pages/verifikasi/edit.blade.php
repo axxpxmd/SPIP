@@ -72,8 +72,8 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
                                             <div class="form-group m-0">
-                                                <label for="pesan" class="col-form-label s-12 col-md-2">Penjelasan</label>
-                                                <textarea name="pesan" rows="3" id="pesan" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required>{{ $data->message }}</textarea>
+                                                <label for="pesan" class="col-form-label s-12 col-md-2">Penjelasan Verifikator</label>
+                                                <textarea name="pesan" rows="3" id="pesan" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required>{{ $data->keterangan_revisi }}</textarea>
                                             </div>
                                             <div class="form-group mt-2">
                                                 <div class="col-md-2"></div>

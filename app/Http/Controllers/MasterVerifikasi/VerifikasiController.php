@@ -168,6 +168,7 @@ class VerifikasiController extends Controller
         ));
     }
 
+    // direvisi
     public function updateRevisi($id, Request $request)
     {
         $result = TmResult::where('id', $id)->first();
@@ -180,8 +181,9 @@ class VerifikasiController extends Controller
         }
 
         $result->update([
-            'message' => $request->pesan,
-            'status_kirim' => 0
+            'keterangan_revisi' => $request->pesan,
+            'status_kirim' => 0,
+            'status_revisi' => 1
         ]);
 
         return redirect()
@@ -189,6 +191,7 @@ class VerifikasiController extends Controller
             ->withSuccess('Berhasil! Quesioner berhasil dikembalikan.');
     }
 
+    // disetujui
     public function confirm($id, Request $request)
     {
         $result  = TmResult::where('id', $id)->first();
@@ -209,6 +212,7 @@ class VerifikasiController extends Controller
             ->route('verifikasi.show', array('tahun_id' => $result->quesioner->tahun_id, 'user_id' => $result->user_id, '#pertanyaanDiv' . $element))
             ->withSuccess('Berhasil! Quesioner berhasil diverifikasi.');
     }
+
 
     public function edit($id, Request $request)
     {
@@ -270,6 +274,7 @@ class VerifikasiController extends Controller
         ));
     }
 
+    // di edit
     public function sendRevisi(Request $request, $id)
     {
         $data = TmResult::find($id);
@@ -283,7 +288,6 @@ class VerifikasiController extends Controller
 
         $data->update([
             'keterangan_revisi' => $request->pesan,
-            'status_revisi' => 1,
             'answer_id_revisi' => $request->answer_id_revisi
         ]);
 
