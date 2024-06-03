@@ -78,11 +78,15 @@
                                         @endif
                                     </div>
                                     <div class="row">
+                                        <label class="col-sm-2 fs-13"><strong>Kuesioner Terkirim </strong></label>
+                                        <label class="col-sm-10 fs-13">: {{ $countResult }} Pertanyaan</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-sm-2 fs-13"><strong>Status Verifikasi </strong></label>
                                         <label class="col-sm-10 fs-13">: {{ $countResultVerif }} dari {{ $countResult }} Pertanyaan | {{ $getPercentVerif }}%</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-sm-2 fs-13"><strong>Status Quesioner</strong></label>
+                                        <label class="col-sm-2 fs-13"><strong>Status Kuesioner</strong></label>
                                         <label class="col-sm-10 fs-13">:
                                             @if ($status_kirim != 0)
                                                 Belum Terkirim

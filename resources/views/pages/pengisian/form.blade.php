@@ -204,7 +204,6 @@
                 <div class="col-md-12 p-0">
                     <button type="submit" class="btn btn-light btn-sm font-weight-normal" id="submitButton"><i class="icon-save mr-2"></i>Simpan Kuesioner</button>
                     <div class="p-0 float-right disabled">
-                        {{-- {{ $indikators->links() }} --}}
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item">
@@ -214,7 +213,7 @@
                                     <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page+1)) }}">Selanjutnya<i class="icon icon-arrow-right ml-3 mr-n3"></i></a>
                                 </li>
                             </ul>
-                          </nav>
+                        </nav>
                     </div>
                 </div>
             </div>
