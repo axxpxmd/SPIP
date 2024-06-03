@@ -2,7 +2,7 @@
     $totalRevisi = App\TmResult::select('tm_results.id', 'tm_quesioners.tahun_id')
                     ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                     ->where('tm_results.user_id', Auth::user()->id)
-                    ->where('status_kirim', 0)
+                    ->where('status_revisi', 1)
                     ->count();
 
     $role = Auth::user()->modelHasRole->role_id;

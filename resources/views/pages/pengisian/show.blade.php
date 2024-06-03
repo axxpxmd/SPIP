@@ -135,7 +135,12 @@
                                                 $files = App\Models\TrResultFile::where('result_id', $q->id)->get();
                                             @endphp
                                             <!-- Question -->
-                                            <li type="disc" class="text-black font-weight-normal mt-2">{{ $q->n_question }}</li>
+                                            <li type="disc" class="text-black font-weight-normal mt-2">
+                                                {{ $q->n_question }}
+                                                @if ($q->status == 1)
+                                                    <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i>
+                                                @endif
+                                            </li>
                                             <!-- Answer -->
                                             @foreach ($answers as $index2 => $a)
                                             <div class="form-check mt-1">
@@ -156,15 +161,9 @@
                                                 @endforelse
                                             </div>
                                             <div class="mt-1 mb-4">
-                                                @if ($q->status == 1)
-                                                <div class="mt-1">
-                                                    <span class="text-danger"><strong class="text-black">Pesan :</strong> {{ $q->keterangan_revisi }}</span>
-                                                </div>
-                                                <div class="mt-1">
-                                                    <span class=""><strong class="text-black">Nilai Awal :</strong> {{ $q->nilai_awal }}</span>
-                                                </div>
-                                                <div class="mt-1">
-                                                    <span class=""><strong class="text-black">Nilai Akhir :</strong> {{ $q->nilai_akhir }}</span>
+                                                @if ($q->status_kirim == 1)
+                                                <div class="mt-1 mb-2">
+                                                    <span class="text-danger"><strong class="text-black">Penjelasan Verifikator :</strong> {{ $q->keterangan_revisi ? $q->keterangan_revisi : '-' }}</span>
                                                 </div>
                                                 @endif
                                                 <div>

@@ -96,7 +96,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('hasil/update/{id}', 'DataQuesionerController@update')->name('hasil.update');
         Route::get('hasil/deleteFile/{id}', 'DataQuesionerController@deleteFile')->name('hasil.deleteFile');
         Route::post('hasil/send-quesioner', 'DataQuesionerController@sendQuesioner')->name('hasil.sendQuesioner');
-        Route::post('upload-file-lhe-tindak-lanjut', 'DataQuesionerController@uploadLhe')->name('hasil.uploadLhe');
 
         Route::get('revisi', 'RevisiController@index')->name('revisi.index');
         Route::post('revisi/api', 'RevisiController@api')->name('revisi.api');

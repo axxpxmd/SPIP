@@ -332,29 +332,4 @@ class DataQuesionerController extends Controller
             ->route('hasil.show', $tahun_id)
             ->withSuccess('Selamat, Quesioner berhasil terkirim!');
     }
-
-    public function uploadLhe(Request $request)
-    {
-        $user_id = $request->user_id;
-        $tahun_id = $request->tahun_id;
-        $file = $request->file;
-
-        // upload file
-        $ext = $file->extension();
-        $fileName = time() . $user_id . "." . $ext;
-        $file->storeAs($this->path, $fileName, 'sftp', 'public');
-
-        $data = FileLhe::firstOrCreate([
-            'user_id' => $user_id,
-            'tahun_id' => $tahun_id,
-            'status' => 1,
-        ]);
-        $data->update([
-            'file' => $fileName
-        ]);
-
-        return redirect()
-            ->route('hasil.show', $tahun_id)
-            ->withSuccess('File LHE berhasil diupload.');
-    }
 }
