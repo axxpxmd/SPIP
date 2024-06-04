@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <div class="card mt-2">
-                            <h6 class="card-header font-weight-bold text-black">Detail Pengisian</h6>
+                            <h6 class="card-header font-weight-bold text-black">Hasil Verifikasi</h6>
                             <div class="card-body">
                                 <p class="text-black m-0 mb-1">KETERANGAN SIMBOL</p>
                                 <p class="m-0 text-black">
@@ -139,7 +139,7 @@
 
                                                 <!-- disetujui -->
                                                 @if ($status == 1 && $answer_id_revisi == 1)
-                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i></a>
+                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-check-circle text-success" title="{{ $p->n_question }}"></i></a>
                                                 @endif
 
                                                 <!-- diproses -->
@@ -149,7 +149,7 @@
 
                                                 <!-- ditolak -->
                                                 @if ($status == 1 && $answer_id_revisi == 2)
-                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i></a>
+                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-times-circle text-danger" title="{{ $p->n_question }}"></i></a>
                                                 @endif
 
                                                 <!-- belum diisi -->
