@@ -7,19 +7,14 @@ use Carbon;
 use DataTables;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 // Models
-use App\User;
 use App\TmResult;
 use App\Models\Time;
-use App\Models\Answer;
-use App\Models\FileLhe;
 use App\Models\Pegawai;
 use App\Models\Quesioner;
 use App\Models\Indikator;
-use App\Models\Indikator2023;
 use App\Models\TrResultFile;
 use App\Models\VerifikatorTempat;
 use App\Models\TrQuesionerAnswer;
@@ -143,7 +138,10 @@ class VerifikasiController extends Controller
         $role_id = Auth::user()->modelHasRole->role_id;
         $title = 'Perangkat Daerah';
 
+        $totalIndikator = Indikator::select('id', 'n_indikator')->get();
+
         return view('pages.verifikasi.show', compact(
+            'totalIndikator',
             'totalRevisi',
             'role_id',
             'id',
@@ -273,9 +271,16 @@ class VerifikasiController extends Controller
         $result  = TmResult::where('id', $id)->first();
         $element = $request->element;
 
-        $result->update([
-            'status' => 1
-        ]);
+        if ($result->answer_id_revisi) {
+            $result->update([
+                'status' => 1
+            ]);
+        } else {
+            $result->update([
+                'status' => 1,
+                'answer_id_revisi' => $result->answer_id
+            ]);
+        }
 
         return redirect()
             ->route('verifikasi.show', array('tahun_id' => $result->quesioner->tahun_id, 'user_id' => $result->user_id, '#pertanyaanDiv' . $element))

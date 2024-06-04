@@ -63,7 +63,7 @@
                         </div>
                         @else
                         <div class="alert alert-danger text-center my-2 font-weight-bold" role="alert">
-                            <span class="fs-14">Terdapat {{ $countQuesioners - $countResultVerif }} kuesioner yang belum diverifikasi!</span>
+                            <span class="fs-14">Terdapat {{ $countResult - $countResultVerif }} kuesioner yang belum diverifikasi!</span>
                         </div>
                         @endif
                         @if (session()->has('success'))
@@ -75,9 +75,13 @@
                         </div>
                         @endif
                         <div class="card">
-                            <h6 class="card-header font-weight-bold text-black">Hasil Pengisian Kuesioner</h6>
+                            <h6 class="card-header font-weight-bold text-black">Detail Verifikasi</h6>
                             <div class="card-body">
                                 <div class="col-md-12 text-black">
+                                    <div class="row">
+                                        <label class="col-sm-2 fs-13"><strong>Total Kuesioner Diisi </strong></label>
+                                        <label class="col-sm-10 fs-13">: {{ $countResult }} Pertanyaan</label>
+                                    </div>
                                     <div class="row">
                                         <label class="col-sm-2 fs-13"><strong>Status Pengisian </strong></label>
                                         <label class="col-sm-10 fs-13">: {{ $countResult }} dari {{ $countQuesioners }} Pertanyaan | {{ $getPercent }}%</label>
@@ -90,6 +94,72 @@
                                         <label class="col-sm-2 fs-13"><strong>Total Kuesioner Direvisi </strong></label>
                                         <label class="col-sm-10 fs-13">: {{ $totalRevisi }} Pertanyaan</label>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <h6 class="card-header font-weight-bold text-black">Detail Pengisian</h6>
+                            <div class="card-body">
+                                <p class="text-black m-0 mb-1">KETERANGAN SIMBOL</p>
+                                <p class="m-0 mb-1 text-black">
+                                    <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : SESUAI
+                                </p>
+                                <p class="m-0 mb-1 text-black">
+                                    <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : PROSES VERIFIKASI
+                                </p>
+                                <p class="m-0 mb-1 text-black">
+                                    <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : TIDAK SESUAI
+                                </p>
+                                <p class="m-0 mb-1 text-black">
+                                    <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
+                                </p>
+
+                                <hr>
+                                <div class="row">
+                                    @foreach ($totalIndikator as $indexti => $ti)
+                                    @php
+                                        $pertanyaan = App\Models\Pertanyaan::where('indikator_id', $ti->id)->get();
+                                    @endphp
+                                    <div class="col">
+                                        <p class="text-black font-weight-bold mb-1">{{ $indexti+1 }}.</p>
+                                        @foreach ($pertanyaan as $indexp => $p)
+                                            @php
+                                                $checkPertanyaan = App\TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+                                                        ->where('tm_quesioners.indikator_id', $ti->id)
+                                                        ->where('tm_quesioners.question_id', $p->id)
+                                                        ->first();
+
+                                                $status = $checkPertanyaan ? $checkPertanyaan->status : '0';
+                                                $status_kirim = $checkPertanyaan ? $checkPertanyaan->status_kirim : '0';
+                                                $answer_id = $checkPertanyaan ? $checkPertanyaan->answer_id : '0';
+                                                $answer_id_revisi = $checkPertanyaan ? $checkPertanyaan->answer_id_revisi : '0';
+                                            @endphp
+                                            <p class="text-black m-0">
+                                                {{-- {{$indexp+1 }} --}}
+
+                                                <!-- disetujui -->
+                                                @if ($status == 1 && $answer_id_revisi == 1)
+                                                <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i>
+                                                @endif
+
+                                                <!-- diproses -->
+                                                @if ($status == 0 && $checkPertanyaan)
+                                                <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i>
+                                                @endif
+
+                                                <!-- ditolak -->
+                                                @if ($status == 1 && $answer_id_revisi == 2)
+                                                <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i>
+                                                @endif
+
+                                                <!-- belum diisi -->
+                                                @if (!$checkPertanyaan)
+                                                <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i>
+                                                @endif
+                                            </p>
+                                        @endforeach
+                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
