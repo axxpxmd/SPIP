@@ -159,7 +159,7 @@
                                     @endphp
                                     @foreach ($answers as $index2 => $a)
                                     <div class="form-check" style="margin-left: -12px !important">
-                                        <input type="radio" class="form-check-input" id="answer{{ $index2 }}{{ $index }}{{ $indexes }}" name="answer_id{{ $index }}{{ $indexes }}" value="{{ $a->answer->id }}">
+                                        <input type="radio" class="form-check-input inputDisabled{{ $indexes+1 }}" disabled onchange="disable({{ $indexes+1 }})" id="answer{{ $index2 }}{{ $index }}{{ $indexes }}" name="answer_id{{ $index }}{{ $indexes }}" value="{{ $a->answer->id }}">
                                         <label class="form-check-label fs-14 text-black" for="answer{{ $index2 }}{{ $index }}{{ $indexes }}">{{ $a->answer->jawaban }}</label>
                                     </div>
                                     <script>
@@ -253,6 +253,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/js/fileinput.js"></script>
 
     <script>
+        disable();
+        function disable(id){
+            $('.inputDisabled1').prop("disabled", false)
+
+            for (let index = 1; index <= 5; index++) {
+                if (id == index) {
+                    inc = id+1;
+                    $('.inputDisabled'+inc).prop("disabled", false)
+                }
+            }
+        }
+
         $('#form').on('submit', function (e) {
             if ($(this)[0].checkValidity() === false) {
                 event.preventDefault();

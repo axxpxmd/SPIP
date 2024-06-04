@@ -78,7 +78,8 @@ p {
 
 ul, ol, li {
 	/* margin: 0px; */
-	list-style-type: decimal;
+	/* list-style-type: decimal; */
+    list-style-type: disc;
 }
 
 
