@@ -163,6 +163,7 @@ class DataQuesionerController extends Controller
         // ETC
         $countQuesioners = Quesioner::getTotal($tahunId, $zonaId);
         $countResult = TmResult::getTotal($tahunId, $userId);
+        $countResultTerkirim = TmResult::getTotalTerkirim($tahunId, $userId);
         $getPercent = round($countResult / $countQuesioners * 100);
 
         $countResultVerif = TmResult::getTotalVerif($tahunId, $userId);
@@ -176,6 +177,7 @@ class DataQuesionerController extends Controller
             ->count();
 
         return view('pages.pengisian.show', compact(
+            'countResultTerkirim',
             'route',
             'title',
             'time',

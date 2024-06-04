@@ -46,6 +46,18 @@ class TmResult extends Model
     }
 
     //
+    public static function getTotalTerkirim($tahunId, $userId)
+    {
+        $data = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('user_id', $userId)
+            ->where('tm_quesioners.tahun_id', $tahunId)
+            ->where('status_kirim', 1)
+            ->count();
+
+        return $data;
+    }
+
+    //
     public static function getTotalVerif($tahunId, $userId)
     {
         $data =  TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')

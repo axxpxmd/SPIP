@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 fs-13"><strong>Kuesioner Terkirim </strong></label>
-                                        <label class="col-sm-10 fs-13">: {{ $countResult }} Pertanyaan</label>
+                                        <label class="col-sm-10 fs-13">: {{ $countResultTerkirim }} Pertanyaan</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 fs-13"><strong>Status Verifikasi </strong></label>
