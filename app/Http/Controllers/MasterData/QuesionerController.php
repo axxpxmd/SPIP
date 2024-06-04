@@ -14,6 +14,7 @@ use App\Models\Indikator;
 use App\Models\Quesioner;
 use App\Models\Pertanyaan;
 use App\Models\TrQuesionerAnswer;
+use App\TmResult;
 
 class QuesionerController extends Controller
 {
@@ -27,8 +28,9 @@ class QuesionerController extends Controller
         $route = $this->route;
 
         $tahuns = Time::select('id', 'tahun')->get();
-        $indikators = Indikator::select('id', 'n_indikator')->get();
-        $indikators = Indikator::select('id', 'n_indikator')->get();
+
+        $checkIndikator = Quesioner::select('indikator_id')->get()->toArray();
+        $indikators = Indikator::select('id', 'n_indikator')->whereNotIn('id', $checkIndikator)->get();
 
         $jawabans = Answer::select('id', 'jawaban')->get();
 
@@ -50,7 +52,8 @@ class QuesionerController extends Controller
 
         return DataTables::of($quesioner)
             ->addColumn('action', function ($p) {
-                return "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Permission'><i class='icon icon-remove'></i></a>";
+                // return "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Permission'><i class='icon icon-remove'></i></a>";
+                return '-';
             })
             ->editColumn('question_id', function ($p) {
                 return substr($p->question->n_question, 0, 200);
@@ -111,6 +114,14 @@ class QuesionerController extends Controller
             'tahun_id.required' => 'Tahun wajib diisi',
             'indikator_id.required' => 'Indikator wajib diisi'
         ]);
+
+        // check indikator
+        $checkIndikator =  Quesioner::where('indikator_id', $indikator_id)->first();
+        if ($checkIndikator) {
+            return response()->json([
+                'message' => 'Indikator sudah pernah tersimpan.'
+            ], 500);
+        }
 
         // generate ulang
         Quesioner::where('indikator_id', $indikator_id)->delete();

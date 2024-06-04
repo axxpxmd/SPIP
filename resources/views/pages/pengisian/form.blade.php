@@ -32,7 +32,7 @@
             <div class="col-md-12 p-0">
                 <div class="wrap-contact100 p-0">
                     <div class="text-center p-2">
-                        <p class="fs-21 font-weight-bold text-black">KUESIONER PENILAIAN LAPORAN AKUNTABILITAS KINERJA INSTANSI PEMERINTAH</p>
+                        <p class="fs-21 font-weight-bold text-black">KUESIONER SISTEM PENGENDALIAN INTERN PEMERINTAH</p>
                         <p class="fs-21 font-weight-bold text-black text-uppercase" style="margin-top: -15px !important">DI LINGKUNGAN PERANGKAT DAERAH</p>
                         <p class="fs-21 font-weight-bold text-black text-uppercase" style="margin-top: -15px !important">KOTA TANGERANG SELATAN</p>
                         <p class="fs-21 font-weight-bold text-black text-uppercase" style="margin-top: -15px !important">TAHUN {{ $time->tahun }}</p>
@@ -113,6 +113,7 @@
             </div>
         </div>
         @endif
+        @if ($time->status == 1)
         <form action="{{ route('form-quesioner.store') }}" method="POST" id="form" enctype="multipart/form-data">
             {{ method_field('POST') }}
             {{ csrf_field() }}
@@ -218,6 +219,17 @@
                 </div>
             </div>
         </form>
+        @else
+        <div class="container p-0 mt-1">
+            <div class="col-md-12 p-0">
+                <div class="wrap-contact100 p-0">
+                    <div class="container text-black p-2">
+                        <p class="text-center text-danger">Kuesioner belum dibuka!.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
     @include('pages.pengisian.tataCara')
 </body>

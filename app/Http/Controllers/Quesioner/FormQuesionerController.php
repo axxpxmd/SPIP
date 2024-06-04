@@ -46,7 +46,7 @@ class FormQuesionerController extends Controller
 
         // Check
         $check = Quesioner::where('tahun_id', $request->tahun_id)->count();
-        $time = Time::select('id', 'tahun')->where('id', $request->tahun_id)->first();
+        $time = Time::select('id', 'tahun', 'status')->where('id', $request->tahun_id)->first();
         if ($check == 0) {
             return redirect()
                 ->route($this->route . 'index')
