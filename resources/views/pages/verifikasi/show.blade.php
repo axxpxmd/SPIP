@@ -101,16 +101,16 @@
                             <h6 class="card-header font-weight-bold text-black">Detail Pengisian</h6>
                             <div class="card-body">
                                 <p class="text-black m-0 mb-1">KETERANGAN SIMBOL</p>
-                                <p class="m-0 mb-1 text-black">
+                                <p class="m-0 text-black">
                                     <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : SESUAI
                                 </p>
-                                <p class="m-0 mb-1 text-black">
+                                <p class="m-0 text-black">
                                     <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : PROSES VERIFIKASI
                                 </p>
-                                <p class="m-0 mb-1 text-black">
+                                <p class="m-0 text-black">
                                     <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : TIDAK SESUAI
                                 </p>
-                                <p class="m-0 mb-1 text-black">
+                                <p class="m-0 text-black">
                                     <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
                                 </p>
 
@@ -121,7 +121,7 @@
                                         $pertanyaan = App\Models\Pertanyaan::where('indikator_id', $ti->id)->get();
                                     @endphp
                                     <div class="col">
-                                        <p class="text-black font-weight-bold mb-1">{{ $indexti+1 }}.</p>
+                                        <p class="text-black font-weight-bold mb-1" title="{{ $ti->n_indikator }}">{{ $indexti+1 }}.</p>
                                         @foreach ($pertanyaan as $indexp => $p)
                                             @php
                                                 $checkPertanyaan = App\TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
@@ -139,17 +139,17 @@
 
                                                 <!-- disetujui -->
                                                 @if ($status == 1 && $answer_id_revisi == 1)
-                                                <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i>
+                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i></a>
                                                 @endif
 
                                                 <!-- diproses -->
                                                 @if ($status == 0 && $checkPertanyaan)
-                                                <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i>
+                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-question-circle text-warning" title="{{ $p->n_question }}"></i></a>
                                                 @endif
 
                                                 <!-- ditolak -->
                                                 @if ($status == 1 && $answer_id_revisi == 2)
-                                                <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i>
+                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i></a>
                                                 @endif
 
                                                 <!-- belum diisi -->
