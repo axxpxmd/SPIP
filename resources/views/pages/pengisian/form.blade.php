@@ -119,6 +119,7 @@
             {{ csrf_field() }}
             <input type="hidden" name="totalIndikator" id="totalIndikator" value="{{ $indikators->count() }}">
             <input type="hidden" name="tahun_id" value="{{ $time->id }}">
+            <input type="hidden" name="page" value="{{ $page }}">
             @foreach ($indikators as $index => $i)
             <div class="container mt-2 p-0">
                 <div id="alert"></div>
@@ -207,10 +208,10 @@
                     <div class="p-0 float-right disabled">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
-                                <li class="page-item">
+                                <li class="page-item {{ $page == 1 ? 'disabled' : '-' }}">
                                     <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page-1)) }}"><i class="icon icon-arrow-left mr-2"></i>Sebelumnya</a>
                                 </li>
-                                <li class="page-item {{ $checkQuesioner >= 3 ? '' : 'disabled' }}">
+                                <li class="page-item {{ $checkQuesionerPageNow >= 3 ? '' : 'disabled' }}">
                                     <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page+1)) }}">Selanjutnya<i class="icon icon-arrow-right ml-3 mr-n3"></i></a>
                                 </li>
                             </ul>

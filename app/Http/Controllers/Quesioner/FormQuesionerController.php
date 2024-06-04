@@ -89,9 +89,23 @@ class FormQuesionerController extends Controller
         // check pengisian
         $page = $request->page ? $request->page : 1;
         $checkQuesioner = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('tm_quesioners.indikator_id', $page == 1 ? 1 : $page - 1)->count();
+
+        $checkQuesionerPageNow = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
             ->where('tm_quesioners.indikator_id', $page)->count();
 
+        if ($page != 1 && $checkQuesioner < 3) {
+            return redirect()
+                ->route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page - 1))
+                ->withErrors('Jawab terlebih dahulu pertanyaan sebelumnya!');
+        } else if ($page > 1 && $checkQuesioner < 3) {
+            return redirect()
+                ->route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page - 1))
+                ->withErrors('Jawab terlebih dahulu pertanyaan sebelumnya!');
+        }
+
         return view($this->view . 'form', compact(
+            'checkQuesionerPageNow',
             'userId',
             'nTempat',
             'indikators',
@@ -119,6 +133,7 @@ class FormQuesionerController extends Controller
         $totalIndikator = $request->totalIndikator;
         $totalQuestion = $request->totalQuestion;
         $tahun_id = $request->tahun_id;
+        $page = $request->page;
 
         DB::beginTransaction(); //* DB Transaction Begin
 
@@ -187,7 +202,7 @@ class FormQuesionerController extends Controller
         DB::commit(); //* DB Transaction Success
 
         return redirect()
-            ->route('form-quesioner.create', ['tahun_id' => $tahun_id])
+            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page))
             ->withSuccess('Quesioner berhasil tersimpan.');
     }
 }
