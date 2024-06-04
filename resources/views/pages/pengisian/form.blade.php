@@ -87,7 +87,7 @@
                     <div class="container text-black p-2">
                         @if ($countResult != 0)
                         <div class="alert alert-danger" role="alert">
-                            <p class="m-0 text-danger font-weight-bold fs-16 text-center">TERDAPAT {{ $countQuesioners - $countResult }} KUESIONER YANG BELUM DIISI</p>
+                            <p class="m-0 text-danger font-weight-bold fs-14 text-center">TERDAPAT {{ $countQuesioners - $countResult }} KUESIONER YANG BELUM DIISI</p>
                         </div>
                         @endif
                         @include('layouts.alert')

@@ -8,10 +8,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-black">
                 <ol>
                     <li>Pastikan jaringan internet lancar dan stabil.</li>
-                    <li>Selalu perhatikan waktu pengisian kuesioner, isilah kuesioner sebelum masa waktu habis.</li>
                     <li>Kuesioner yang sudah disimpan masih bisa diedit/dirubah pada menu Hasil Quesioner</li>
                     <li>Selengkapnya silahkan klik link ini <a target="_blank" href="https://dataawan.tangerangselatankota.go.id/layakanak/sakip.pdf">Tata Cara Pengisian</a></li>
                 </ol>

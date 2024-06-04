@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Login - SPIP</title>
-    <link href="{{ asset('images/ontime.png') }}" rel="icon" type="image/png">
+    <link href="{{ asset('images/template/tangsel.png') }}" rel="icon" type="image/png">
 
     <!-- LINEARICONS -->
     <link rel="stylesheet" href="{{ asset('assetLogin/fonts/linearicons/style.css') }}">
