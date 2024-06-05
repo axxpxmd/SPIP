@@ -204,7 +204,7 @@
                                                         <span class="text-danger font-weight-bold">( Sedang Direvisi )</span>
                                                     @endif
                                                     @if ($q->status == 1)
-                                                        <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i>
+                                                        <i title="SUDAH TERVERIFIKASI" class="icon icon-verified_user ml-1 text-primary"></i>
                                                     @endif
                                                 </li>
                                             </div>

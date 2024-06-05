@@ -127,7 +127,7 @@
                     <div class="wrap-contact100 p-0">
                         <div class="p-3">
                             <!-- Indikator -->
-                            <p class="text-black font-weight-bold mb-n1 ml-3"> {{ $indikators->firstItem() }}. {{ $i->n_indikator }}</p>
+                            <p class="text-black font-weight-bold mb-n1 ml-3">{{ $i->n_indikator }}</p>
                             <div class="m-l-35">
                                 <span>{{ $i->deskripsi }}</span>
                             </div>

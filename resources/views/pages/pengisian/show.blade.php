@@ -92,7 +92,7 @@
                                                 Belum Terkirim
                                             @else
                                                 @if ($countResultVerif == $countQuesioners)
-                                                    Sudah Diverifikasi <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i>
+                                                    Sudah Diverifikasi <i title="SUDAH TERVERIFIKASI" class="icon icon-verified_user ml-1 text-primary"></i>
                                                 @else
                                                     Sedang Diverifikasi
                                                 @endif
@@ -138,7 +138,7 @@
                                             <li type="disc" class="text-black font-weight-normal mt-2">
                                                 {{ $q->n_question }}
                                                 @if ($q->status == 1)
-                                                    <i title="sudah terverifikasi" class="icon icon-verified_user ml-1 text-primary"></i>
+                                                    <i title="SUDAH TERVERIFIKASI" class="icon icon-verified_user ml-1 text-primary"></i>
                                                 @endif
                                             </li>
                                             <!-- Answer -->
