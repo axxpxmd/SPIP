@@ -176,7 +176,22 @@ class DataQuesionerController extends Controller
             ->where('status_kirim', 0)
             ->count();
 
+        // check quesiton
+        $q = true;
+        for ($i = 1; $i <= 25; $i++) {
+            $q = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+                ->where('tm_quesioners.indikator_id', $i)
+                ->count();
+
+            if ($q >= 3) {
+                $result = true;
+            } else {
+                $result = false;
+            }
+        }
+
         return view('pages.pengisian.show', compact(
+            'result',
             'countResultTerkirim',
             'route',
             'title',
