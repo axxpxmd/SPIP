@@ -212,7 +212,7 @@
                                     <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page-1)) }}"><i class="icon icon-arrow-left mr-2"></i>Sebelumnya</a>
                                 </li>
                                 <li class="page-item {{ $checkQuesionerPageNow >= 3 ? '' : 'disabled' }}">
-                                    <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page+1)) }}">Selanjutnya<i class="icon icon-arrow-right ml-3 mr-n3"></i></a>
+                                    <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page+1, 'indikator_id' => $i->id)) }}">Selanjutnya<i class="icon icon-arrow-right ml-3 mr-n3"></i></a>
                                 </li>
                             </ul>
                         </nav>
