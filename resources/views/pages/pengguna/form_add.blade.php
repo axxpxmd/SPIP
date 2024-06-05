@@ -95,7 +95,7 @@
                                             <label for="telp" class="col-form-label s-12 col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
                                             <input type="text" name="telp" id="telp" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                         </div>
-                                        @if ($role_id == 6)
+                                        @if ($roleId == 6)
                                         <div class="form-group mb-1" id="display_perangkat_daerah">
                                             <label class="col-form-label s-12 col-md-2">Perangkat Daerah <span class="text-danger ml-1">*</span></label>
                                             <div class="col-md-6 p-0 bg-light">
