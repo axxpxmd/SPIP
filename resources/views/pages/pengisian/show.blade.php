@@ -102,7 +102,9 @@
                                     <hr>
                                     <div class="mt-2">
                                         @if ($result == true)
-                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#verifikasi"><i class="icon-send mr-2"></i>Kirim untuk diverifikasi</button>
+                                            @if ($status_kirim > 0)
+                                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#verifikasi"><i class="icon-send mr-2"></i>Kirim untuk diverifikasi</button>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
