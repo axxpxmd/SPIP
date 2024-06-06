@@ -177,10 +177,11 @@ class DataQuesionerController extends Controller
             ->count();
 
         // check quesiton
+        $totalIndikator = Quesioner::select('indikator_id')->groupBy('indikator_id')->get();
         $q = true;
-        for ($i = 1; $i <= 25; $i++) {
+        foreach ($totalIndikator as $ti) {
             $q = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-                ->where('tm_quesioners.indikator_id', $i)
+                ->where('tm_quesioners.indikator_id', $ti->indikator_id)
                 ->count();
 
             if ($q >= 3) {

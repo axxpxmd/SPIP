@@ -104,7 +104,10 @@ class FormQuesionerController extends Controller
                 ->withErrors('Jawab terlebih dahulu pertanyaan sebelumnya!');
         }
 
+        $totalIndikator = Quesioner::select('indikator_id')->groupBy('indikator_id')->get();
+
         return view($this->view . 'form', compact(
+            'totalIndikator',
             'checkQuesionerPageNow',
             'userId',
             'nTempat',
