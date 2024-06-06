@@ -100,20 +100,37 @@
                         <div class="card mt-2">
                             <h6 class="card-header font-weight-bold text-black">Hasil Verifikasi</h6>
                             <div class="card-body">
-                                <p class="text-black m-0 mb-1">KETERANGAN SIMBOL</p>
-                                <p class="m-0 text-black">
-                                    <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : SESUAI
-                                </p>
-                                <p class="m-0 text-black">
-                                    <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : PROSES VERIFIKASI
-                                </p>
-                                <p class="m-0 text-black">
-                                    <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : TIDAK SESUAI
-                                </p>
-                                <p class="m-0 text-black">
-                                    <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
-                                </p>
-
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-black m-0 mb-1">KETERANGAN SIMBOL</p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : SESUAI
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : PROSES VERIFIKASI
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : TIDAK SESUAI
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
+                                        </p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : SESUAI
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : PROSES VERIFIKASI
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : TIDAK SESUAI
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
+                                        </p>
+                                    </div>
+                                </div>
                                 <hr>
                                 <div class="row">
                                     @foreach ($totalIndikator as $indexti => $ti)
@@ -127,6 +144,7 @@
                                                 $checkPertanyaan = App\TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                                                         ->where('tm_quesioners.indikator_id', $ti->id)
                                                         ->where('tm_quesioners.question_id', $p->id)
+                                                        ->where('tm_results.user_id', $userId)
                                                         ->first();
 
                                                 $status = $checkPertanyaan ? $checkPertanyaan->status : '0';
