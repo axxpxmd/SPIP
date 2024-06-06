@@ -178,7 +178,13 @@
                                         }
 
                                         $('#answer'+{{ $index2 }}+{{ $index }}+{{ $indexes }}).change(function () {
-                                            $("#file"+{{ $index }}+{{ $indexes }}).prop('required', true);
+                                            val = $('#answer'+{{ $index2 }}+{{ $index }}+{{ $indexes }}).val();
+
+                                            if (val == 1) {
+                                                $("#file"+{{ $index }}+{{ $indexes }}).prop('required', true);
+                                            }else{
+                                                $("#file"+{{ $index }}+{{ $indexes }}).prop('required', false);
+                                            }
                                         });
                                     </script>
                                     @endforeach
