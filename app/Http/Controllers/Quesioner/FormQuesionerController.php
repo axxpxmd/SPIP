@@ -225,7 +225,7 @@ class FormQuesionerController extends Controller
         DB::commit(); //* DB Transaction Success
 
         return redirect()
-            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page, 'indikator_id' => $result->quesioner->indikator_id))
+            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page, 'indikator_id' => $result->quesioner->indikator_id - 1))
             ->withSuccess('Quesioner berhasil tersimpan.');
     }
 }
