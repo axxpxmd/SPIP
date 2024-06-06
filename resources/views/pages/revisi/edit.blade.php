@@ -45,7 +45,7 @@
                             <div class="card">
                                 <h6 class="card-header font-weight-bold text-black">Edit Kuesioner</h6>
                                 <div class="card-body">
-                                    <p class="font-weight-bold text-black ml-3">- {{ $data->quesioner->indikator->n_indikator }}</p>
+                                    <p class="font-weight-bold text-black ml-3">{{ $data->quesioner->indikator->n_indikator }}</p>
                                     <div class="ml-2 mb-2" style="margin-top: -15px !important">
                                         <span>{{ $data->quesioner->indikator->deskripsi }}</span>
                                     </div>

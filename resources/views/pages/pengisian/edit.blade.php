@@ -37,7 +37,7 @@
                             <div class="card">
                                 <h6 class="card-header font-weight-bold text-black">Edit Kuesioner</h6>
                                 <div class="card-body">
-                                    <p class="font-weight-bold text-black ml-3 mb-0">- {{ $data->quesioner->indikator->n_indikator }}</p>
+                                    <p class="font-weight-bold text-black ml-3 mb-0">{{ $data->quesioner->indikator->n_indikator }}</p>
                                     <div class="ml-5">
                                         <span class="text-black font-weight-normal mt-2">{{ $data->quesioner->question->n_question }}</span>
                                         @foreach ($answers as $index2 => $a)
