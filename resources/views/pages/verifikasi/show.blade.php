@@ -117,7 +117,7 @@
                                         </p>
                                     </div>
                                     <div class="col">
-                                        <p class="text-black m-0 mb-1">Total Data</p>
+                                        <p class="text-black m-0 mb-1">TOTAL DATA</p>
                                         <p class="m-0 text-black">
                                             <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : {{ $sesuai }}
                                         </p>

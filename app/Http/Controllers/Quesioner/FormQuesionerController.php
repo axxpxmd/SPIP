@@ -78,6 +78,12 @@ class FormQuesionerController extends Controller
             ->whereNotIn('tm_quesioners.question_id', $check)
             ->groupBy('tm_quesioners.indikator_id')
             ->paginate(1);
+
+        if ($indikators->count() == 0) {
+            return redirect()
+                ->route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $request->page - 1));
+        }
+
         $indikators->appends(['tahun_id' => $tahunId]);
         $checkQuestion = Quesioner::select('question_id')->get()->toArray();
 
