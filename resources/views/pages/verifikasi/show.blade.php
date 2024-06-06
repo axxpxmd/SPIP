@@ -153,8 +153,6 @@
                                                 $answer_id_revisi = $checkPertanyaan ? $checkPertanyaan->answer_id_revisi : '0';
                                             @endphp
                                             <p class="text-black m-0">
-                                                {{-- {{$indexp+1 }} --}}
-
                                                 <!-- disetujui -->
                                                 @if ($status == 1 && $answer_id_revisi == 1)
                                                 <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-check-circle text-success" title="{{ $p->n_question }}"></i></a>
