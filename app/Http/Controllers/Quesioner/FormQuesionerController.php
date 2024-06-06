@@ -173,7 +173,7 @@ class FormQuesionerController extends Controller
                         if ($size >= 5000000) {
                             DB::rollback(); //* DB Transaction Failed
                             return redirect()
-                                ->route('form-quesioner.create', ['tahun_id' => $tahun_id])
+                                ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page))
                                 ->withErrors('Size file terlalu besar, maksimal 5mb per file..');
                         }
 
@@ -184,7 +184,7 @@ class FormQuesionerController extends Controller
                         if (!in_array($ext, ['png', 'jpg', 'jpeg', 'docx', 'pdf', 'PDF', 'zip', 'rar', 'PNG', 'JPG', 'JPEG', 'DOCX', 'ZIP', 'RAR'])) {
                             DB::rollback(); //* DB Transaction Failed
                             return redirect()
-                                ->route('form-quesioner.create', ['tahun_id' => $tahun_id])
+                                ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page))
                                 ->withErrors('Extension file tidak diperbolehkan.');
                         }
 
@@ -205,7 +205,7 @@ class FormQuesionerController extends Controller
         DB::commit(); //* DB Transaction Success
 
         return redirect()
-            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page))
+            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page, 'indikator_id' => $result->quesioner->indikator_id))
             ->withSuccess('Quesioner berhasil tersimpan.');
     }
 }
