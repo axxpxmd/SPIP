@@ -89,10 +89,10 @@ class FormQuesionerController extends Controller
         // check pengisian
         $page = $request->page ? $request->page : 1;
         $checkQuesioner = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->where('tm_quesioners.indikator_id', $request->indikator_id)->count();
+            ->where('user_id', $userId)->where('tm_quesioners.indikator_id', $request->indikator_id)->count();
 
         $checkQuesionerPageNow = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->where('tm_quesioners.indikator_id', $page)->count();
+            ->where('user_id', $userId)->where('tm_quesioners.indikator_id', $page)->count();
 
         if ($page != 1 && $checkQuesioner < 3) {
             return redirect()
