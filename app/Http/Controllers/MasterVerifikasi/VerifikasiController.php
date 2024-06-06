@@ -140,7 +140,28 @@ class VerifikasiController extends Controller
 
         $totalIndikator = Indikator::select('id', 'n_indikator')->get();
 
+        $sesuai = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('status', 1)
+            ->where('status_kirim', 1)
+            ->where('answer_id_revisi', 1)
+            ->where('tm_results.user_id', $userId)
+            ->count();
+        $proses_verifikasi = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('status', 0)
+            ->where('status_kirim', 1)
+            ->where('tm_results.user_id', $userId)
+            ->count();
+        $tidak_sesuai = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->where('status', 1)
+            ->where('status_kirim', 1)
+            ->where('answer_id_revisi', 2)
+            ->where('tm_results.user_id', $userId)
+            ->count();
+
         return view('pages.verifikasi.show', compact(
+            'sesuai',
+            'proses_verifikasi',
+            'tidak_sesuai',
             'totalIndikator',
             'totalRevisi',
             'role_id',

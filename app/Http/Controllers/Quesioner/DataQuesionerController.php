@@ -191,8 +191,6 @@ class DataQuesionerController extends Controller
             }
         }
 
-        // $sesuai = TmResult
-
         return view('pages.pengisian.show', compact(
             'result',
             'countResultTerkirim',

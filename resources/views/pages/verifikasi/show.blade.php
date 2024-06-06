@@ -118,13 +118,13 @@
                                     </div>
                                     <div class="col">
                                         <p class="m-0 text-black">
-                                            <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : SESUAI
+                                            <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : {{ $sesuai }}
                                         </p>
                                         <p class="m-0 text-black">
-                                            <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : PROSES VERIFIKASI
+                                            <i class="icon fs-16 icon-question-circle text-warning" title="PROSES VERIFIKASI"></i> : {{ $proses_verifikasi }}
                                         </p>
                                         <p class="m-0 text-black">
-                                            <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : TIDAK SESUAI
+                                            <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : {{ $tidak_sesuai }}
                                         </p>
                                         <p class="m-0 text-black">
                                             <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
