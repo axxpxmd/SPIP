@@ -115,7 +115,7 @@
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <!-- Indikator -->
-                                    <p class="font-weight-bold text-black"> {{ $index+1 }}. {{ $i->n_indikator }}</p>
+                                    <p class="font-weight-bold text-black">{{ $i->n_indikator }}</p>
                                     <div class="ml-2 mb-2" style="margin-top: -15px !important">
                                         <span>{{ $i->deskripsi }}</span>
                                     </div>

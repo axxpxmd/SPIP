@@ -105,8 +105,21 @@ class FormQuesionerController extends Controller
         }
 
         $totalIndikator = Quesioner::select('indikator_id')->groupBy('indikator_id')->get();
+        $totalIndikatorTerisi = 0;
+        foreach ($totalIndikator as $ti) {
+            $d = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+                ->where('tm_results.user_id', $userId)
+                ->where('tm_quesioners.tahun_id', $tahunId)
+                ->where('tm_quesioners.indikator_id', $ti->indikator_id)
+                ->count();
+
+            if ($d == 5) {
+                $totalIndikatorTerisi += 1;
+            }
+        }
 
         return view($this->view . 'form', compact(
+            'totalIndikatorTerisi',
             'totalIndikator',
             'checkQuesionerPageNow',
             'userId',

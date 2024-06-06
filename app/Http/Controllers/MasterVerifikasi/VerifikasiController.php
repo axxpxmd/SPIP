@@ -139,7 +139,6 @@ class VerifikasiController extends Controller
         $title = 'Perangkat Daerah';
 
         $totalIndikator = Indikator::select('id', 'n_indikator')->get();
-
         $sesuai = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
             ->where('status', 1)
             ->where('status_kirim', 1)
@@ -158,7 +157,12 @@ class VerifikasiController extends Controller
             ->where('tm_results.user_id', $userId)
             ->count();
 
+        $total_pertanyaan = Quesioner::count();
+        $total_pertanyaan_diisi = TmResult::where('tm_results.user_id', $userId)->count();
+        $tidak_diisi = $total_pertanyaan - $total_pertanyaan_diisi;
+
         return view('pages.verifikasi.show', compact(
+            'tidak_diisi',
             'sesuai',
             'proses_verifikasi',
             'tidak_sesuai',

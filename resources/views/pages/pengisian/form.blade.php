@@ -207,7 +207,6 @@
                     </div>
                 </div>
             </div>
-            @endforeach
             <div class="container p-0 mt-2">
                 <div class="col-md-12 p-0">
                     <button type="submit" class="btn btn-light btn-sm font-weight-normal" id="submitButton"><i class="icon-save mr-2"></i>Simpan Kuesioner</button>
@@ -217,7 +216,7 @@
                                 <li class="page-item {{ $page == 1 ? 'disabled' : '-' }}">
                                     <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page-1)) }}"><i class="icon icon-arrow-left mr-2"></i>Sebelumnya</a>
                                 </li>
-                                <li class="page-item {{ $checkQuesionerPageNow >= 3 ? '' : 'disabled' }} {{ $page+1 > $totalIndikator->count() ? 'disabled' : '-' }}">
+                                <li class="page-item {{ $checkQuesionerPageNow >= 3 ? '' : 'disabled' }} {{ $page+1 > $totalIndikator->count() - $totalIndikatorTerisi ? 'disabled' : '-' }}">
                                     <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page+1, 'indikator_id' => $i->id)) }}">Selanjutnya<i class="icon icon-arrow-right ml-3 mr-n3"></i></a>
                                 </li>
                             </ul>
@@ -225,6 +224,7 @@
                     </div>
                 </div>
             </div>
+            @endforeach
         </form>
         @else
         <div class="container p-0 mt-1">

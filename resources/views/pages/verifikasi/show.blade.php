@@ -117,6 +117,7 @@
                                         </p>
                                     </div>
                                     <div class="col">
+                                        <p class="text-black m-0 mb-1">Total Data</p>
                                         <p class="m-0 text-black">
                                             <i class="icon fs-16 icon-check-circle text-success" title="SESUAI"></i> : {{ $sesuai }}
                                         </p>
@@ -127,7 +128,7 @@
                                             <i class="icon fs-16 icon-times-circle text-danger" title="TIDAK SESUAI"></i> : {{ $tidak_sesuai }}
                                         </p>
                                         <p class="m-0 text-black">
-                                            <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
+                                            <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : {{ $tidak_diisi }}
                                         </p>
                                     </div>
                                 </div>
@@ -135,7 +136,7 @@
                                 <div class="row">
                                     @foreach ($totalIndikator as $indexti => $ti)
                                     @php
-                                        $pertanyaan = App\Models\Pertanyaan::where('indikator_id', $ti->id)->get();
+                                        $pertanyaan = App\Models\Quesioner::where('indikator_id', $ti->id)->get();
                                     @endphp
                                     <div class="col">
                                         <p class="text-black font-weight-bold mb-1" title="{{ $ti->n_indikator }}">{{ $indexti+1 }}.</p>
@@ -192,7 +193,7 @@
                                                 ->orderBy('tm_results.status', 'ASC')
                                                 ->first();
                                     @endphp
-                                    <p class="font-weight-bold text-black"> {{ $index+1 }}. {{ $i->n_indikator }}</p>
+                                    <p class="font-weight-bold text-black">{{ $i->n_indikator }}</p>
                                     <div class="ml-2 mb-2" style="margin-top: -15px !important">
                                         <span>{{ $i->deskripsi }}</span>
                                     </div>
