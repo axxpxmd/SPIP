@@ -269,7 +269,7 @@
                 if (id == index) {
                     inc = id+1;
                     $('.inputDisabled'+inc).prop("disabled", false)
-                    $('.inputDisabled'+inc).prop("required", true)
+                    // $('.inputDisabled'+inc).prop("required", true)
                 }
             }
         }
