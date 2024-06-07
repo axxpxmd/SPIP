@@ -21,7 +21,7 @@
                     <div class="card mt-2 r-15 no-b">
                         <div class="card-body">
                             <div class="text-center">
-                                <p class="mb-0 font-weight-normal fs-18 text-black">SELAMAT DATANG DI APLIKASI SAKIP</p>
+                                <p class="mb-0 font-weight-normal fs-18 text-black">SELAMAT DATANG DI APLIKASI SPIP</p>
                                 <p class="mt-0 font-weight-normal text-black">Anda Login Sebagai Role ( {{ Auth::user()->modelHasRole->role->name }} )</p>
                             </div>
                         </div>
