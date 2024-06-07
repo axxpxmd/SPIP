@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pertanyaan extends Model
 {
     protected $table = 'tm_questions';
-    protected $fillable = ['id', 'indikator_id', 'n_question', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'indikator_id', 'n_question', 'status_wajib', 'created_at', 'updated_at'];
 
     public function indikator()
     {

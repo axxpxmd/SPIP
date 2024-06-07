@@ -181,15 +181,16 @@ class DataQuesionerController extends Controller
         $result = true;
         foreach ($totalIndikator as $ti) {
             $q = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+                ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
                 ->where('tm_results.user_id', $userId)
+                ->where('tm_questions.status_wajib', 1)
                 ->where('tm_quesioners.indikator_id', $ti->indikator_id)
                 ->count();
 
-            if ($q >= 3) {
-                $result = true;
-            } else {
+            if ($q < 3) {
                 $result = false;
             }
+
         }
 
         return view('pages.pengisian.show', compact(
