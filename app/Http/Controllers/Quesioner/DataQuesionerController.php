@@ -167,6 +167,7 @@ class DataQuesionerController extends Controller
         $getPercent = round($countResult / $countQuesioners * 100);
 
         $countResultVerif = TmResult::getTotalVerif($tahunId, $userId);
+
         $getPercentVerif = round($countResultVerif / $countResult * 100);
 
         // Check Verification
