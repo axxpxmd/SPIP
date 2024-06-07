@@ -49,11 +49,11 @@
                                 <label class="col-md-10 ml-n5 pl-0">: {{ $jKepala }}</label>
                             </div>
                             <div class="row">
-                                <label class="col-md-2"><strong>Nama Operator</strong></label>
+                                <label class="col-md-2"><strong>Nama Asesor</strong></label>
                                 <label class="col-md-10 ml-n5 pl-0">: {{ $nOperator }}</label>
                             </div>
                             <div class="row">
-                                <label class="col-md-2"><strong>Jabatan Operator</strong></label>
+                                <label class="col-md-2"><strong>Jabatan Asesor</strong></label>
                                 <label class="col-md-10 ml-n5 pl-0">: {{ $jOperator }}</label>
                             </div>
                             <div class="row">

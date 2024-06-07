@@ -51,11 +51,11 @@
                                     <label class="col-md-8 s-14">{{ $pegawai->jabatan_kepala }}</label>
                                 </div>
                                 <div class="row">
-                                    <label class="col-md-3 text-right s-13"><strong>Nama Operator :</strong></label>
+                                    <label class="col-md-3 text-right s-13"><strong>Nama Asesor :</strong></label>
                                     <label class="col-md-8 s-14">{{ $pegawai->nama_operator }}</label>
                                 </div>
                                 <div class="row">
-                                    <label class="col-md-3 text-right s-13"><strong>Jabatan Operator :</strong></label>
+                                    <label class="col-md-3 text-right s-13"><strong>Jabatan Asesor :</strong></label>
                                     <label class="col-md-8 s-14">{{ $pegawai->jabatan_operator }}</label>
                                 </div>
                                 <div class="row">
@@ -100,11 +100,11 @@
                                                 <input type="text" name="jabatan_kepala" id="jabatan_kepala" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->jabatan_kepala }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="nama_operator" class="col-form-label s-12 col-md-2">Nama Operator<span class="text-danger ml-1">*</span></label>
+                                                <label for="nama_operator" class="col-form-label s-12 col-md-2">Nama Asesor<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="nama_operator" id="nama_operator" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->nama_operator }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="jabatan_operator" class="col-form-label s-12 col-md-2">Jabatan Operator<span class="text-danger ml-1">*</span></label>
+                                                <label for="jabatan_operator" class="col-form-label s-12 col-md-2">Jabatan Asesor<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="jabatan_operator" id="jabatan_operator" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->jabatan_operator }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
@@ -205,7 +205,7 @@
             }
         }
     }
-   
+
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {
             event.preventDefault();
@@ -225,7 +225,7 @@
                     $.confirm({
                         title: 'Success',
                         content: data.message,
-                        icon: 'icon icon-check', 
+                        icon: 'icon icon-check',
                         theme: 'modern',
                         animation: 'scale',
                         autoClose: 'ok|3000',

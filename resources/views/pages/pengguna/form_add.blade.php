@@ -55,11 +55,11 @@
                                             <input type="text" name="jabatan_kepala" id="jabatan_kepala" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                         </div>
                                         <div class="form-group m-0">
-                                            <label for="nama_operator" class="col-form-label s-12 col-md-2">Nama Operator<span class="text-danger ml-1">*</span></label>
+                                            <label for="nama_operator" class="col-form-label s-12 col-md-2">Nama Asesor<span class="text-danger ml-1">*</span></label>
                                             <input type="text" name="nama_operator" id="nama_operator" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                         </div>
                                         <div class="form-group m-0">
-                                            <label for="jabatan_operator" class="col-form-label s-12 col-md-2">Jabatan Operator<span class="text-danger ml-1">*</span></label>
+                                            <label for="jabatan_operator" class="col-form-label s-12 col-md-2">Jabatan Asesor<span class="text-danger ml-1">*</span></label>
                                             <input type="text" name="jabatan_operator" id="jabatan_operator" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                         </div>
                                         <div class="form-group m-0">
