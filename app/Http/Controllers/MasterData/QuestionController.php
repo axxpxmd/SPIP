@@ -109,16 +109,19 @@ class QuestionController extends Controller
     {
         $request->validate([
             'indikator_id' => 'required',
-            'n_question' => 'required|unique:tm_questions,n_question,' . $id
+            'n_question' => 'required|unique:tm_questions,n_question,' . $id,
+            'status_wajib' => 'required'
         ]);
 
         // get param
         $indikator_id = $request->indikator_id;
         $n_question = $request->n_question;
+        $status_wajib = $request->status_wajib;
 
         Pertanyaan::where('id', $id)->update([
             'indikator_id' => $indikator_id,
-            'n_question' => $n_question
+            'n_question' => $n_question,
+            'status_wajib' => $status_wajib
         ]);
 
         return response()->json([

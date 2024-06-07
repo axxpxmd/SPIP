@@ -41,6 +41,10 @@
                                         <label class="col-md-10 s-12">{{ $pertanyaan->indikator->n_indikator }}</label>
                                     </div>
                                     <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>Status :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $pertanyaan->status_wajib == 1 ? 'Wajib' : 'Tidak Wajib' }}</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Pertanyaan :</strong></label>
                                         <label class="col-md-10 s-12">{{ $pertanyaan->n_question }}</label>
                                     </div>
@@ -70,6 +74,16 @@
                                                         @foreach ($indikators as $i)
                                                             <option value="{{ $i->id }}">{{ $i->n_indikator }} </option>
                                                         @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-1">
+                                                <label class="col-form-label s-12 col-md-2">Status<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-8 p-0 bg-light">
+                                                    <select class="select2 form-control r-0 light s-12" id="status_wajib" name="status_wajib" autocomplete="off">
+                                                        <option value="">Pilih</option>
+                                                        <option value="1" {{ $pertanyaan->status_wajib == 1 ? 'selected' : '-'  }}>Wajib</option>
+                                                        <option value="0" {{ $pertanyaan->status_wajib == 0 ? 'selected' : '-' }}>Tidak Wajib</option>
                                                     </select>
                                                 </div>
                                             </div>
