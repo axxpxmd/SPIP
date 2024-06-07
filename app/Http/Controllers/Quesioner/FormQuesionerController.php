@@ -80,10 +80,6 @@ class FormQuesionerController extends Controller
             ->paginate(1);
 
         $page = $request->page ? $request->page : 1;
-        if ($indikators->count() == 0 && $page != 1) {
-            return redirect()
-                ->route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $request->page - 1));
-        }
 
         $indikators->appends(['tahun_id' => $tahunId]);
         $checkQuestion = Quesioner::select('question_id')->get()->toArray();
@@ -93,42 +89,7 @@ class FormQuesionerController extends Controller
         $countResult = TmResult::getTotal($tahunId, $userId);
         $getPercent = round($countResult / $countQuesioners * 100);
 
-        // check pengisian
-        $page = $request->page ? $request->page : 1;
-        $checkQuesioner = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->where('user_id', $userId)->where('tm_quesioners.indikator_id', $request->indikator_id)->count();
-
-        $checkQuesionerPageNow = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-            ->where('user_id', $userId)->where('tm_quesioners.indikator_id', $page)->count();
-
-        if ($page != 1 && $checkQuesioner < 3) {
-            return redirect()
-                ->route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page - 1))
-                ->withErrors('Jawab terlebih dahulu pertanyaan sebelumnya!');
-        } else if ($page > 1 && $checkQuesioner < 3) {
-            return redirect()
-                ->route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page - 1))
-                ->withErrors('Jawab terlebih dahulu pertanyaan sebelumnya!');
-        }
-
-        $totalIndikator = Quesioner::select('indikator_id')->groupBy('indikator_id')->get();
-        $totalIndikatorTerisi = 0;
-        foreach ($totalIndikator as $ti) {
-            $d = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
-                ->where('tm_results.user_id', $userId)
-                ->where('tm_quesioners.tahun_id', $tahunId)
-                ->where('tm_quesioners.indikator_id', $ti->indikator_id)
-                ->count();
-
-            if ($d == 5) {
-                $totalIndikatorTerisi += 1;
-            }
-        }
-
         return view($this->view . 'form', compact(
-            'totalIndikatorTerisi',
-            'totalIndikator',
-            'checkQuesionerPageNow',
             'userId',
             'nTempat',
             'indikators',
@@ -146,8 +107,7 @@ class FormQuesionerController extends Controller
             'nOperator',
             'jOperator',
             'getPercent',
-            'page',
-            'checkQuesioner'
+            'page'
         ));
     }
 
@@ -225,7 +185,7 @@ class FormQuesionerController extends Controller
         DB::commit(); //* DB Transaction Success
 
         return redirect()
-            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page, 'indikator_id' => $result->quesioner->indikator_id - 1))
+            ->route('form-quesioner.create', array('tahun_id' => $tahun_id, 'page' => $page))
             ->withSuccess('Quesioner berhasil tersimpan.');
     }
 }

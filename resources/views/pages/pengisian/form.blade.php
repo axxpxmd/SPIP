@@ -160,7 +160,7 @@
                                     @endphp
                                     @foreach ($answers as $index2 => $a)
                                     <div class="form-check" style="margin-left: -12px !important">
-                                        <input type="radio" class="form-check-input inputDisabled{{ $indexes+1 }}" disabled onchange="disable({{ $indexes+1 }})" id="answer{{ $index2 }}{{ $index }}{{ $indexes }}" name="answer_id{{ $index }}{{ $indexes }}" value="{{ $a->answer->id }}">
+                                        <input type="radio" class="form-check-input {{ $indexes+1 }}" id="answer{{ $index2 }}{{ $index }}{{ $indexes }}" name="answer_id{{ $index }}{{ $indexes }}" value="{{ $a->answer->id }}">
                                         <label class="form-check-label fs-14 text-black" for="answer{{ $index2 }}{{ $index }}{{ $indexes }}">{{ $a->answer->jawaban }}</label>
                                     </div>
                                     <script>
@@ -178,13 +178,7 @@
                                         }
 
                                         $('#answer'+{{ $index2 }}+{{ $index }}+{{ $indexes }}).change(function () {
-                                            val = $('#answer'+{{ $index2 }}+{{ $index }}+{{ $indexes }}).val();
-
-                                            if (val == 1) {
-                                                $("#file"+{{ $index }}+{{ $indexes }}).prop('required', true);
-                                            }else{
-                                                $("#file"+{{ $index }}+{{ $indexes }}).prop('required', false);
-                                            }
+                                            $("#file"+{{ $index }}+{{ $indexes }}).prop('required', true);
                                         });
                                     </script>
                                     @endforeach
@@ -210,17 +204,8 @@
             <div class="container p-0 mt-2">
                 <div class="col-md-12 p-0">
                     <button type="submit" class="btn btn-light btn-sm font-weight-normal" id="submitButton"><i class="icon-save mr-2"></i>Simpan Kuesioner</button>
-                    <div class="p-0 float-right disabled">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item {{ $page == 1 ? 'disabled' : '-' }}">
-                                    <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page-1)) }}"><i class="icon icon-arrow-left mr-2"></i>Sebelumnya</a>
-                                </li>
-                                <li class="page-item {{ $checkQuesionerPageNow >= 3 ? '' : 'disabled' }} {{ $page+1 > $totalIndikator->count() - $totalIndikatorTerisi ? 'disabled' : '-' }}">
-                                    <a class="page-link" href="{{ route('form-quesioner.create', array('tahun_id' => $tahunId, 'page' => $page+1, 'indikator_id' => $i->id)) }}">Selanjutnya<i class="icon icon-arrow-right ml-3 mr-n3"></i></a>
-                                </li>
-                            </ul>
-                        </nav>
+                    <div class="p-0 float-right"">
+                        {{ $indikators->links() }}
                     </div>
                 </div>
             </div>
@@ -260,20 +245,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/js/fileinput.js"></script>
 
     <script>
-        disable();
-        function disable(id){
-            $('.inputDisabled1').prop("disabled", false)
-            $('.inputDisabled1').prop("required", true)
-
-            for (let index = 1; index <= 5; index++) {
-                if (id == index) {
-                    inc = id+1;
-                    $('.inputDisabled'+inc).prop("disabled", false)
-                    // $('.inputDisabled'+inc).prop("required", true)
-                }
-            }
-        }
-
         $('#form').on('submit', function (e) {
             if ($(this)[0].checkValidity() === false) {
                 event.preventDefault();
