@@ -22,7 +22,7 @@ use App\Models\TrQuesionerAnswer;
 class VerifikasiController extends Controller
 {
     protected $route = 'verifikasi.';
-    protected $path = 'images/file/';
+    protected $path = 'file/';
     protected $view = 'pages.verifikasi.';
 
     public function index()

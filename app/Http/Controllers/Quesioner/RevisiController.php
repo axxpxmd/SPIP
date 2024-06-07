@@ -25,7 +25,7 @@ class RevisiController extends Controller
 {
     protected $route = 'revisi.';
     protected $title = 'Revisi Quesioner';
-    protected $path = 'images/file/';
+    protected $path = 'file/';
 
     public function index()
     {

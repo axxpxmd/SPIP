@@ -28,7 +28,7 @@ class DataQuesionerController extends Controller
 {
     protected $route = 'hasil.';
     protected $title = 'Hasil Quesioner';
-    protected $path = 'images/file/';
+    protected $path = 'file/';
 
     public function index()
     {

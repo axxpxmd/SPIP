@@ -18,7 +18,7 @@ use App\Models\VerifikatorTempat;
 class StatuPengisianController extends Controller
 {
     protected $route = 'statusPengisian.';
-    protected $path = 'images/file/';
+    protected $path = 'file/';
     protected $view = 'pages.statusPengisian.';
     protected $title = 'Perangkat Daerah';
 
