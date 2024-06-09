@@ -8,18 +8,18 @@ use DateTime;
 use DataTables;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Http\Controllers\Controller;
 
 // Models
 use App\TmResult;
 use App\Models\Time;
-use App\Models\Answer;
 use App\Models\Pegawai;
 use App\Models\Quesioner;
 use App\Models\Indikator;
 use App\Models\TrResultFile;
 use App\Models\TrQuesionerAnswer;
-use Illuminate\Support\Facades\DB;
 
 class RevisiController extends Controller
 {
@@ -258,6 +258,8 @@ class RevisiController extends Controller
             'keterangan' => $keterangan
         ]);
 
+        DB::beginTransaction(); //* DB Transaction Begin
+
         $checkFile = $request->hasFile('file');
         if ($checkFile) {
             $countFile = count($request->file('file'));
@@ -266,6 +268,15 @@ class RevisiController extends Controller
                 // Saved to Storage
                 $file = $request->file('file');
                 $fileName = time() . "." . $file[$k]->getClientOriginalName();
+                $ext = $file[$k]->extension();
+
+                if (!in_array($ext, ['png', 'jpg', 'jpeg', 'docx', 'pdf', 'PDF', 'zip', 'rar', 'PNG', 'JPG', 'JPEG', 'DOCX', 'ZIP', 'RAR'])) {
+                    DB::rollback(); //* DB Transaction Failed
+                    return redirect()
+                        ->route('revisi.edit', $data->id)
+                        ->withErrors('Extension file tidak diperbolehkan.');
+                }
+
                 if ($file[$k] != null) {
                     $file[$k]->storeAs($this->path, $fileName, 'sftp', 'public');
                 }
@@ -277,6 +288,8 @@ class RevisiController extends Controller
                 $inputFile->save();
             }
         }
+
+        DB::commit(); //* DB Transaction Success
 
         return redirect()
             ->route('revisi.edit', $data->id)
