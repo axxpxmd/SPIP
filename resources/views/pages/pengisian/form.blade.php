@@ -179,6 +179,9 @@
 
                                         $('#answer'+{{ $index2 }}+{{ $index }}+{{ $indexes }}).change(function () {
                                             $("#file"+{{ $index }}+{{ $indexes }}).prop('required', true);
+
+                                            console.log('fkds')
+                                            $('#pagination_display').css("display", "none");
                                         });
                                     </script>
                                     @endforeach
@@ -204,7 +207,7 @@
             <div class="container p-0 mt-2">
                 <div class="col-md-12 p-0">
                     <button type="submit" class="btn btn-light btn-sm font-weight-normal" id="submitButton"><i class="icon-save mr-2"></i>Simpan Kuesioner</button>
-                    <div class="p-0 float-right"">
+                    <div class="p-0 float-right" id="pagination_display">
                         {{ $indikators->links() }}
                     </div>
                 </div>
