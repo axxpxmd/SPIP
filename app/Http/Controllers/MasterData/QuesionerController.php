@@ -31,6 +31,7 @@ class QuesionerController extends Controller
 
         $checkIndikator = Quesioner::select('indikator_id')->get()->toArray();
         $indikators = Indikator::select('id', 'n_indikator')->whereNotIn('id', $checkIndikator)->get();
+        $indikator_filter = Indikator::select('id', 'n_indikator')->get();
 
         $jawabans = Answer::select('id', 'jawaban')->get();
 
@@ -39,7 +40,8 @@ class QuesionerController extends Controller
             'route',
             'indikators',
             'tahuns',
-            'jawabans'
+            'jawabans',
+            'indikator_filter'
         ));
     }
 

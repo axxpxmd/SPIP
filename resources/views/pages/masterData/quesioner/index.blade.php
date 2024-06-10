@@ -47,7 +47,7 @@
                                     <div class="col-sm-8">
                                         <select name="indikator_id_filter" id="indikator_id_filter" class="select2 form-control r-0 light s-12" onchange="selectOnChange()">
                                             <option value="">Semua</option>
-                                            @foreach ($indikators as $i)
+                                            @foreach ($indikator_filter as $i)
                                                 <option value="{{ $i->id }}">{{ $i->n_indikator }} </option>
                                             @endforeach
                                         </select>
