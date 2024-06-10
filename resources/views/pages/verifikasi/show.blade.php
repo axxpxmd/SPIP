@@ -199,45 +199,48 @@
                                     </div>
                                     <ol>
                                         @php
-                                             $datas = App\TmResult::select('tm_results.id as id','status_revisi','status_kirim', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'tm_results.answer_id as answer_id', 'keterangan_revisi', 'answer_id_revisi', 'keterangan')
+                                            $pertanyaan = App\Models\Quesioner::where('indikator_id', $i->id)->get();
+                                        @endphp
+                                        @foreach ($pertanyaan as $indexq => $q)
+                                            @php
+                                                $data = App\TmResult::select('tm_results.id as id','status_revisi','status_kirim', 'tm_questions.n_question', 'tm_questions.id as id_question', 'tm_quesioners.id as id_quesioner', 'status', 'tm_results.answer_id as answer_id', 'keterangan_revisi', 'answer_id_revisi', 'keterangan')
                                                         ->join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
                                                         ->join('tm_questions', 'tm_questions.id', '=', 'tm_quesioners.question_id')
                                                         ->where('tm_quesioners.indikator_id', $i->id)
                                                         ->where('tm_results.user_id', $userId)
                                                         ->where('tm_quesioners.tahun_id', $tahunId)
+                                                        ->where('tm_questions.id', $q->id)
                                                         ->orderBy('tm_quesioners.id', 'ASC')
-                                                        ->get();
-                                        @endphp
-                                        @foreach ($datas as $indexq => $q)
-                                            @php
-                                                $answers = App\Models\TrQuesionerAnswer::where('quesioner_id', $q->id_quesioner)->get();
+                                                        ->first();
                                             @endphp
+                                            @if ($data)
                                             @php
-                                                $files = App\Models\TrResultFile::where('result_id', $q->id)->get();
+                                                  $answers = App\Models\TrQuesionerAnswer::where('quesioner_id', $data->id_quesioner)->get();
+                                                  $files = App\Models\TrResultFile::where('result_id', $data->id)->get();
                                             @endphp
                                             <div id="pertanyaanDiv{{ $index }}{{ $indexq }}">
-                                                <li type="disc" class="text-black font-weight-normal mt-2">{{ $q->n_question }}
-                                                    @if ($q->status_revisi == 1)
+                                                <li type="disc" class="text-black font-weight-normal mt-2">{{ $data->n_question }}
+                                                    @if ($data->status_revisi == 1)
                                                         <span class="text-danger font-weight-bold">( Sedang Direvisi )</span>
                                                     @endif
-                                                    @if ($q->status == 1)
+                                                    @if ($data->status == 1)
                                                         <i title="SUDAH TERVERIFIKASI" class="icon icon-verified_user ml-1 text-primary"></i>
                                                     @endif
                                                 </li>
                                             </div>
                                             @foreach ($answers as $index2 => $a)
                                             <div class="form-check mt-1">
-                                                <input type="radio" class="form-check-input" value="{{ $a->answer->id }}" {{ $a->answer->id == $q->answer_id_revisi ? "checked" : "disabled" }} >
-                                                <input type="radio" class="form-check-input" value="{{ $a->answer->id }}" {{ $a->answer->id == $q->answer_id ? "checked" : "disabled" }} >
-                                                @if ($q->answer_id == $q->answer_id_revisi)
-                                                <label class="form-check-label fs-14 {{ $a->answer->id == $q->answer_id ? "text-primary" : "-" }} font-weight-normal">{{ $a->answer->jawaban }}</label>
+                                                <input type="radio" class="form-check-input" value="{{ $a->answer->id }}" {{ $a->answer->id == $data->answer_id_revisi ? "checked" : "disabled" }} >
+                                                <input type="radio" class="form-check-input" value="{{ $a->answer->id }}" {{ $a->answer->id == $data->answer_id ? "checked" : "disabled" }} >
+                                                @if ($data->answer_id == $data->answer_id_revisi)
+                                                <label class="form-check-label fs-14 {{ $a->answer->id == $data->answer_id ? "text-primary" : "-" }} font-weight-normal">{{ $a->answer->jawaban }}</label>
                                                 @else
-                                                <label class="form-check-label fs-14 {{ $a->answer->id == $q->answer_id_revisi ? "text-danger" : "-" }} {{ $a->answer->id == $q->answer_id ? "text-primary" : "-" }} font-weight-normal">{{ $a->answer->jawaban }}</label>
+                                                <label class="form-check-label fs-14 {{ $a->answer->id == $data->answer_id_revisi ? "text-danger" : "-" }} {{ $a->answer->id == $data->answer_id ? "text-primary" : "-" }} font-weight-normal">{{ $a->answer->jawaban }}</label>
                                                 @endif
                                             </div>
                                             @endforeach
                                             <div class="mt-1">
-                                                <span class=" text-black"><strong class="text-black">Keterangan :</strong> {{ $q->keterangan }} </span>
+                                                <span class=" text-black"><strong class="text-black">Keterangan :</strong> {{ $data->keterangan }} </span>
                                             </div>
                                             <div class="mt-1">
                                                 <span class=""><strong class="text-black">File :</strong></span>
@@ -249,24 +252,25 @@
                                             </div>
                                             <div class="mb-4">
                                                 <div class="mt-1 mb-2">
-                                                    <span class="text-danger"><strong class="text-black">Penjelasan Verifikator :</strong> {{ $q->keterangan_revisi ? $q->keterangan_revisi : '-' }}</span>
+                                                    <span class="text-danger"><strong class="text-black">Penjelasan Verifikator :</strong> {{ $data->keterangan_revisi ? $data->keterangan_revisi : '-' }}</span>
                                                 </div>
                                                 @php
                                                     $element = $index.$indexq;
                                                 @endphp
                                                 @if ($role_id != 8)
-                                                    @if ($q->status_revisi == 0 && $q->status == 0)
-                                                        <button class="btn btn-success btn-sm" data-toggle="modal" onclick="getRouteForm({{ $q->id }}, {{ $element }})" data-target="#verifikasi"><i class="icon-check mr-2"></i>Verifikasi</button>
-                                                        <a class="btn btn-primary btn-sm" href="{{ route('verifikasi.edit', $q->id . '?element=pertanyaanDiv'.$index.$indexq) }}"><i class="icon-edit mr-2"></i>Edit Jawaban</a>
-                                                        @if (!$q->answer_id_revisi)
-                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" onclick="getRevisiForm({{ $q->id }}, {{ $element }})" data-target="#revisi"><i class="icon-check mr-2"></i>Revisi</button>
+                                                    @if ($data->status_revisi == 0 && $data->status == 0)
+                                                        <button class="btn btn-success btn-sm" data-toggle="modal" onclick="getRouteForm({{ $data->id }}, {{ $element }})" data-target="#verifikasi"><i class="icon-check mr-2"></i>Verifikasi</button>
+                                                        <a class="btn btn-primary btn-sm" href="{{ route('verifikasi.edit', $data->id . '?element=pertanyaanDiv'.$index.$indexq) }}"><i class="icon-edit mr-2"></i>Edit Jawaban</a>
+                                                        @if (!$data->answer_id_revisi)
+                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" onclick="getRevisiForm({{ $data->id }}, {{ $element }})" data-target="#revisi"><i class="icon-check mr-2"></i>Revisi</button>
                                                         @endif
                                                     @endif
-                                                    @if ($q->status == 1)
-                                                    <a href="{{ route('verifikasi.batalkanVerifikasi', $q->id . '?element=pertanyaanDiv'.$index.$indexq) }}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin membatalkan verifikasi data ini?')"><i class="icon icon-times"></i> Batalkan Verifikasi</a>
+                                                    @if ($data->status == 1)
+                                                    <a href="{{ route('verifikasi.batalkanVerifikasi', $data->id . '?element=pertanyaanDiv'.$index.$indexq) }}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin membatalkan verifikasi data ini?')"><i class="icon icon-times"></i> Batalkan Verifikasi</a>
                                                     @endif
                                                 @endif
                                             </div>
+                                            @endif
                                         @endforeach
                                     </ol>
                                 </div>
