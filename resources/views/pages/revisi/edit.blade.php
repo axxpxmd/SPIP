@@ -31,14 +31,7 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
-                        @if (session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show bdr-5 col-md-12 container mt-1" id="successAlert" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        @endif
+                        @include('layouts.alert')
                         <form class="needs-validation" action="{{ route('revisi.update', $data->id) }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <input type="hidden" name="total_kuesioner" value="{{ $data->quesioner->count() }}">
