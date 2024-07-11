@@ -131,3 +131,5 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('data/api', 'StatuPengisianController@api')->name('api');
     });
 });
+
+Route::get('check/{jenis}', 'HomeController@checkDuplicate');
