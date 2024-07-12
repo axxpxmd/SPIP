@@ -115,6 +115,9 @@
                                         <p class="m-0 text-black">
                                             <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : TIDAK DIISI
                                         </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-refresh text-primary" title="SEDANG DIREVISI"></i> : SEDANG DIREVISI
+                                        </p>
                                     </div>
                                     <div class="col">
                                         <p class="text-black m-0 mb-1">TOTAL DATA</p>
@@ -129,6 +132,9 @@
                                         </p>
                                         <p class="m-0 text-black">
                                             <i class="icon fs-16 icon-ban text-danger" title="TIDAK DIISI"></i> : {{ $tidak_diisi }}
+                                        </p>
+                                        <p class="m-0 text-black">
+                                            <i class="icon fs-16 icon-refresh text-primary" title="SEDANG DIREVISI"></i> : {{ $sedang_direvisi }}
                                         </p>
                                     </div>
                                 </div>
@@ -152,6 +158,14 @@
                                                 $status_kirim = $checkPertanyaan ? $checkPertanyaan->status_kirim : '0';
                                                 $answer_id = $checkPertanyaan ? $checkPertanyaan->answer_id : '0';
                                                 $answer_id_revisi = $checkPertanyaan ? $checkPertanyaan->answer_id_revisi : '0';
+
+                                                $direvisi = App\TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+                                                        ->where('tm_quesioners.indikator_id', $ti->id)
+                                                        ->where('tm_quesioners.question_id', $p->id)
+                                                        ->where('tm_results.user_id', $userId)
+                                                        ->whereNotNull('keterangan_revisi')
+                                                        ->where('status_kirim', 0)
+                                                        ->first();
                                             @endphp
                                             <p class="text-black m-0">
                                                 <!-- disetujui -->
@@ -160,13 +174,18 @@
                                                 @endif
 
                                                 <!-- diproses -->
-                                                @if ($status == 0 && $checkPertanyaan)
+                                                @if ($status == 0 && $checkPertanyaan && !$direvisi)
                                                 <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-question-circle text-warning" title="{{ $p->n_question }}"></i></a>
                                                 @endif
 
                                                 <!-- ditolak -->
                                                 @if ($status == 1 && $answer_id_revisi == 2)
                                                 <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-times-circle text-danger" title="{{ $p->n_question }}"></i></a>
+                                                @endif
+
+                                                <!-- direvisi -->
+                                                @if ($direvisi)
+                                                <a href="#pertanyaanDiv{{ $indexti.$indexp }}"><i class="icon fs-16 icon-refresh text-primary" title="{{ $p->n_question }}"></i></a>
                                                 @endif
 
                                                 <!-- belum diisi -->

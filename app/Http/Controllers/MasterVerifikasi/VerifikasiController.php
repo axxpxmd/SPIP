@@ -156,12 +156,18 @@ class VerifikasiController extends Controller
             ->where('answer_id_revisi', 2)
             ->where('tm_results.user_id', $userId)
             ->count();
+        $sedang_direvisi = TmResult::join('tm_quesioners', 'tm_quesioners.id', '=', 'tm_results.quesioner_id')
+            ->whereNotNull('keterangan_revisi')
+            ->where('status_kirim', 0)
+            ->where('tm_results.user_id', $userId)
+            ->count();
 
         $total_pertanyaan = Quesioner::count();
         $total_pertanyaan_diisi = TmResult::where('tm_results.user_id', $userId)->count();
         $tidak_diisi = $total_pertanyaan - $total_pertanyaan_diisi;
 
         return view('pages.verifikasi.show', compact(
+            'sedang_direvisi',
             'tidak_diisi',
             'sesuai',
             'proses_verifikasi',
