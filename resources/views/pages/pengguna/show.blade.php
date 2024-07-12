@@ -94,7 +94,7 @@
                                     @if ($verifikatorTempat)
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
-                                        <label class="col-md-3 s-12">
+                                        <label class="col-md-8 s-12">
                                             @foreach ($verifikatorTempat as $i)
                                                 <li>{{ $i->tempat->n_tempat }}</li>
                                             @endforeach
@@ -126,19 +126,19 @@
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ $pegawai->id }}"/>
                                     <div class="form-row form-inline">
-                                        <div class="col-md-8">
+                                        <div class="col-md-7">
                                             <div class="form-group m-0">
-                                                <label for="username" class="col-form-label s-12 col-md-2">Username</label>
+                                                <label for="username" class="col-form-label s-12 col-md-3">Username</label>
                                                 <input type="text" name="username" id="username" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->user->username }}" autocomplete="off" required/>
                                             </div>
                                             <hr>
                                             <div class="form-group m-0">
-                                                <label for="nama_instansi" class="col-form-label s-12 col-md-2">Nama Instansi</label>
+                                                <label for="nama_instansi" class="col-form-label s-12 col-md-3">Nama Instansi</label>
                                                 <input type="text" name="nama_instansi" id="nama_instansi" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->nama_instansi }}" autocomplete="off" required/>
                                             </div>
                                             @if ($pegawai->user->modelHasRole->role_id == 6)
                                             <div class="form-group mb-1">
-                                                <label class="col-form-label s-12 col-md-2">Perangkat Daerah</label>
+                                                <label class="col-form-label s-12 col-md-3">Perangkat Daerah</label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select name="opds[]" id="opds" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple">
                                                         @foreach($opds as $key=>$opds)
@@ -150,42 +150,42 @@
                                             @endif
                                             @if ($pegawai->user->modelHasRole->role_id == 5)
                                             <div class="form-group m-0">
-                                                <label for="nama_kepala" class="col-form-label s-12 col-md-2">Nama Kepala</label>
+                                                <label for="nama_kepala" class="col-form-label s-12 col-md-3">Nama Kepala</label>
                                                 <input type="text" name="nama_kepala" id="nama_kepala" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->nama_kepala }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="jabatan_kepala" class="col-form-label s-12 col-md-2">Jabatan Kepala</label>
+                                                <label for="jabatan_kepala" class="col-form-label s-12 col-md-3">Jabatan Kepala</label>
                                                 <input type="text" name="jabatan_kepala" id="jabatan_kepala" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->jabatan_kepala }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="nama_operator" class="col-form-label s-12 col-md-2">Nama Asesor</label>
+                                                <label for="nama_operator" class="col-form-label s-12 col-md-3">Nama Asesor</label>
                                                 <input type="text" name="nama_operator" id="nama_operator" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->nama_operator }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="jabatan_operator" class="col-form-label s-12 col-md-2">Jabatan Asesor</label>
+                                                <label for="jabatan_operator" class="col-form-label s-12 col-md-3">Jabatan Asesor</label>
                                                 <input type="text" name="jabatan_operator" id="jabatan_operator" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->jabatan_operator }}" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="email" class="col-form-label s-12 col-md-2">Email</label>
+                                                <label for="email" class="col-form-label s-12 col-md-3">Email</label>
                                                 <input type="email" name="email" id="email" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->email }}" autocomplete="off" required/>
                                             </div>
                                             @endif
                                             <div class="form-group m-0">
-                                                <label for="telp" class="col-form-label s-12 col-md-2">No Telp</label>
+                                                <label for="telp" class="col-form-label s-12 col-md-3">No Telp</label>
                                                 <input type="text" name="telp" id="telp" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->telp }}" autocomplete="off" required/>
                                             </div>
                                             @if ($pegawai->user->modelHasRole->role_id == 5)
                                             <div class="form-group m-0">
-                                                <label for="alamat" class="col-form-label s-12 col-md-2">Alamat</label>
+                                                <label for="alamat" class="col-form-label s-12 col-md-3">Alamat</label>
                                                 <input type="text" name="alamat" id="alamat" class="form-control r-0 light s-12 col-md-6" value="{{ $pegawai->alamat }}" autocomplete="off" required/>
                                             </div>
                                             @endif
                                             <div class="form-group mt-2">
-                                                <div class="col-md-2"></div>
+                                                <div class="col-md-3"></div>
                                                 <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan Perubahan<span id="txtAction"></span></button>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-5">
                                             @foreach ($verifikatorTempat as $i)
                                                 <li>{{ $i->tempat->n_tempat }}
                                                     <a href="{{ route('pengguna.deleteVerifikatorTempat', $i->id) }}"  onclick="return confirm('Yakin ingin menghapus data ini?')" class="text-danger"><i class="icon icon-times ml-2"></i></a>
