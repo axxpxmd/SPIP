@@ -90,12 +90,13 @@ class FormQuesionerController extends Controller
         $getPercent = round($countResult / $countQuesioners * 100);
 
         // hapus duplikat data
-        $checkDuplicate = TmResult::select('id')->where('user_id', $userId)
+        $checkDuplicate = TmResult::select('id')
+            ->where('user_id', $userId)
             ->groupBy('quesioner_id')
             ->havingRaw('COUNT(quesioner_id) > 1')
             ->get()->toArray();
 
-        if (count($check)) {
+        if (count($checkDuplicate)) {
             TmResult::whereIn('id', $checkDuplicate)->delete();
         }
 
